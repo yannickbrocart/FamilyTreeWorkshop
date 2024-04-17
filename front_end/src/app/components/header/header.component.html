@@ -1,0 +1,7 @@
+<div *ngIf='(isLoggedIn$ | async); else logOut'>
+    <app-logged-header></app-logged-header>
+</div>      
+<ng-template #logOut>     
+    <!-- <app-logged-header></app-logged-header> -->
+    <app-anonymous-header></app-anonymous-header>
+</ng-template>

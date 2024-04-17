@@ -1,0 +1,599 @@
+@import "~bootstrap/dist/css/bootstrap.css";
+
+/* Reset */
+html, body, div, span, applet, object, iframe, h1, h2, h3,
+h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em,
+img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center,
+dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot,
+thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer,
+header, hgroup, menu, nav, output, ruby, section, summary, time, mark, audio, video {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 100%;
+    font: inherit;
+    vertical-align: baseline;
+}
+
+article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section {
+    display: block;
+}
+
+body {
+    line-height: 1;
+    background-color: #fff;
+}
+
+ol, ul {
+    list-style: none;
+}
+
+blockquote, q {
+    quotes: none;
+}
+
+blockquote:before, blockquote:after, q:before, q:after {
+    content: '';
+    content: none;
+}
+
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+
+/* Colors */
+:root {
+    --Grey: #6D6F78;
+    --LightGrey: #DDD;
+    --Blue: #123999;
+    --BlueGreen: #04D9DA;
+    --LightBlueGreen: #E5FEFF;
+    --DarkBlue: #13345a;
+    --Background: #F4F6F9;
+    --Rose: #F2A0D5;
+    --LightOnDark: #FFFCC8;
+    --Skin: #F28F6B;
+    --Red: #D91604;
+    --LightRed: #ffe7e5;
+    --Purple: #985cf9;
+    --DarkPurple: #5b3696;
+    --Olive: #bde619;
+    font-family: 'Roboto', sans-serif;
+}
+
+h1 {
+    font-family: 'M PLUS Code Latin', monospace;
+    font-size: 3rem;
+}
+
+a,
+a:visited,
+a:hover {
+    color: var(--DarkBlue);
+    text-decoration: none;
+}
+
+.max-width {
+    max-width: 1400px;
+}
+
+.btn {
+    background-color: var(--BlueGreen);
+    border: none;
+    color: #fff;
+    font-family: 'M PLUS Code Latin', monospace;
+    font-size: 1.25rem;
+    font-weight: 600;
+    border-radius: 5rem;
+}
+
+.btn-outline {
+    background-color: #fff;
+    border: 2px solid var(--BlueGreen);
+    color: var(--BlueGreen);
+    font-weight: 400;
+}
+
+.btn:hover {
+    background-color: var(--DarkBlue) !important;
+    border-color: var(--DarkBlue) !important;
+}
+
+.btn-outline:hover,
+.btn-outline:active {
+    color: #fff !important;
+}
+
+.btn:disabled {
+    background-color: var(--LightGrey) !important;
+}
+
+.citation {
+    font-family: 'M PLUS Code Latin', monospace;
+    color: var(--BlueGreen);
+    font-weight: 500;
+    font-size: 1.15rem;
+}
+
+
+/* Header */
+header {
+    background-color: #fff;
+    height: 5rem;
+    font-family: 'M PLUS Code Latin', monospace;
+}
+
+.navbar-brand {
+    margin-left: 2rem;
+    font-size: 2rem;
+    font-weight: 600;
+}
+
+header .nav-link {
+    margin: 0 2rem;
+    color: var(--DarkBlue);
+    font-size: 1.25rem;
+}
+
+header .navbar-nav a:hover,
+header .navbar-text a:hover,
+.navbar-brand:hover {
+    text-decoration: underline;
+    text-decoration-thickness: .125rem;
+    text-underline-offset: .5rem;
+    text-decoration-color: var(--BlueGreen);
+}
+
+.navbar-toggler {
+    margin-right: 2rem;
+}
+
+header button {
+    margin-right: 2rem;
+}
+
+header .btn {
+    height: 2.75rem;
+    padding: 0 2rem;
+}
+
+@media (max-width: 991px) {
+    header .btn {
+        width: 14rem;
+        height: 2.75rem;
+        margin: 0 5rem .5rem 2rem;
+    }
+    header .navbar-nav {
+        margin: 0 0 .5rem 2rem;
+    }
+    .dropdown-menu {
+        width: 10rem;
+      }
+    .navbar {
+        background-color: rgba(255, 255 , 255, .97);
+    }
+}
+
+.dropdown-menu {
+    min-width:300px;
+  }
+
+
+/* Footer */
+footer {
+    margin-top: 4rem;
+    height: 5rem;
+    line-height: 1rem;
+}
+
+@media (min-width: 960px) {
+    footer {
+        height: 3.5rem;
+        line-height: 1.75rem;
+    }
+}
+
+footer ul {
+    padding: .4rem 0;
+}
+
+footer .nav-item .nav-link {
+    margin: 0 1rem;
+    color: var(--Grey);
+}
+
+footer .nav-item a:hover {
+    text-decoration: underline;
+    text-decoration-thickness: .1em;
+    text-underline-offset: .5rem;
+    text-decoration-color: var(--BlueGreen);
+}
+
+
+/* Main */
+main {
+    background-color: var(--Background);
+    min-height: 400px;
+    margin: 5rem 2.5rem 0;
+    border-radius: 2rem;
+}
+
+@media (min-width: 1400px) {
+    main {
+        max-width: 1320px !important;
+        margin-inline: auto;
+    }
+}
+
+
+/* Snipet */
+.container-snipet {
+    width: 464px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+}
+
+.snipet {
+    background-color: #fff;
+    width: 430px;
+    margin: auto;
+    padding: 2rem;
+    border-radius: 1rem;
+    color: var(--DarkBlue);
+}
+
+.snipet a {
+    color: var(--DarkBlue);
+    text-decoration: underline;
+    text-decoration-thickness: .1rem;
+    text-underline-offset: .25rem;
+    text-decoration-color: var(--BlueGreen);
+}
+
+.snipet h1 {
+    margin-bottom: 1.25rem;
+}
+
+.snipet h4 {
+    color: var(--BlueGreen);
+    font-size: 1.5rem;
+}
+
+.snipet .form-label {
+    font-size: 1.1rem;
+    margin-top: 0.25rem;
+    line-height: 1.5rem;
+}
+
+.snipet form .form-label {
+    font-size: 1.1rem !important;
+    margin-top: .5rem;
+    margin-bottom: .25rem;
+}
+
+.snipet .form-control,
+.snipet .form-check-input {
+    border-width: 2px;
+}
+
+.inline-link a {
+    font-size: 1.1rem !important;
+}
+
+.container-snipet.snipet-responsive.inner {
+    padding: 0;
+}
+
+@media (min-width: 768px) {
+    .container-snipet.snipet-responsive {
+        width: auto;
+    }
+
+    .container-snipet.snipet-responsive .snipet {
+        width: 600px;
+    }
+
+    @media (min-width: 992px) {
+        .container-snipet.snipet-responsive .snipet {
+            width: 750px;
+        }
+    }
+
+    @media (min-width: 1200px) {
+        .container-snipet.snipet-responsive .snipet {
+            width: 900px;
+        }
+    }
+}
+
+
+/* Page not found */
+.page-not-found {
+    margin-top: -1rem;
+    margin-bottom: -1rem;
+    font-family: 'M PLUS Code Latin', monospace;
+    font-size: 14rem;
+    font-weight: 200;
+}
+
+
+/* Password */
+#forgotPassword {
+    color: var(--BlueGreen);
+    font-size: .9rem;
+}
+
+
+/* Alert */
+.alert {
+    border-width: 0;
+    line-height: 1.25rem;
+}
+
+.alert-heading {
+    font-family: 'M PLUS Code Latin', monospace;
+    font-size: 2.15rem;
+    font-weight: 500;
+}
+
+.alert-danger {
+    background-color: var(--Red);
+    color: var(--LightOnDark) !important;
+}
+
+.alert-success {
+    background-color: var(--Blue);
+    color: var(--LightOnDark) !important;
+}
+
+.bi-exclamation-triangle-fill {
+    width: 30px;
+    fill: var(--LightOnDark) !important;
+}
+
+.bi-check-circle-fill {
+    width: 30px;
+    fill: var(--LightOnDark) !important;
+}
+
+
+/* orms */
+input.ng-valid {
+    border: 2px solid var(--BlueGreen);
+}
+
+input.ng-touched.ng-invalid:not(form) {
+    border: 2px solid var(--Red);
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus {
+    box-shadow: 0 0 0 1000px #FFF inset;
+}
+
+#icon-div input.inputfile {
+    border: 2px solid #DEE2E6;
+}
+
+/* Icons */
+#icon-div {
+    position: relative;
+}
+
+#icon-div i {
+    position: absolute;
+    font-size: 1.5rem;
+    transform: translateY(-155%);
+    right: 15px;
+    transition: all 0.2s;
+}
+
+.fa-eye-slash,
+.fa-eye {
+    color: var(--Grey);
+    font-size: 1.2rem !important;
+    transform: translateY(-175%) !important;
+}
+
+.fa-check {
+    color: var(--BlueGreen);
+}
+
+.fa-xmark {
+    color: var(--Red);
+}
+
+#icon-div i.icon-row {
+    right: 30px;
+}
+
+.check-color {
+    color: var(--BlueGreen);
+}
+
+.xmark-color {
+    color: var(--Red);
+}
+
+
+/* Import */
+.file-information {
+    border-top: solid .5px var(--LightGrey);
+}
+
+.file-information .row {
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.file-information .file-information-category,
+.file-information .file-information-value {
+    line-height: 1.7;
+    color: var(--DarkBlue);
+    border-bottom: solid .5px var(--LightGrey);
+}
+
+.file-information .row.stripped:hover {
+    background-color: var(--Background);
+}
+
+.file-information .file-information-value {
+    font-family: 'M PLUS Code Latin', monospace;
+    font-size: 1rem;
+    color: var(--Grey) !important;
+}
+
+@media (max-width: 768px) {
+    .file-information .file-information-category {
+        border-bottom: solid 0px;
+        height: 1.1rem;
+    }
+}
+
+
+/* Genealogy */
+.half-btn {
+    background-color: #fff;
+    border: 2px solid var(--BlueGreen);
+    color: var(--BlueGreen);
+    height: 2.25rem;
+    border-radius: 1rem;
+    font-size: 1.2rem;
+    padding: 0 2.2rem;
+    margin-right: 1rem;
+}
+
+.half-btn.tmp {
+    background-color: var(--Background)!important;
+    border-color: var(--Background) !important;
+    color: #FFF;
+}
+
+.half-btn:disabled,
+.half-btn[disabled] {
+    background-color: var(--BlueGreen)!important;
+    border-color: var(--BlueGreen) !important;
+}
+
+.manage-btn, .manage-btn-danger, .manage-btn-alert {
+    background-color: var(--BlueGreen);
+    color: #FFF;
+    font-family: 'Roboto', sans-serif;
+    height: 36px;
+    line-height: 1rem;
+    width: 60px;
+    border-radius: .8rem;
+    font-size: .85rem;
+    font-weight: 400;
+    padding: 0 auto;
+    margin: 0.2rem 0;
+}
+
+.manage-btn-danger {
+    background-color: var(--Rose);
+}
+
+.manage-btn-alert {
+    background-color: var(--Red);
+}
+
+.genealogy-list, 
+.genealogy-manage-list {
+    border-top: solid .5px var(--LightGrey);
+}
+
+.genealogy-list .row, 
+.genealogy-manage-list .row {
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.genealogy-list .row.stripped:hover, 
+.genealogy-manage-list .row.stripped:hover  {
+    background-color: var(--Background);
+}
+
+.genealogy-list .genealogy-list-value, 
+.genealogy-manage-list .genealogy-manage-list-value {
+    font-family: 'M PLUS Code Latin', monospace;
+    color: var(--Grey);
+    font-size: .8rem;
+    line-height: 1.7rem;
+    border-bottom: solid .5px var(--LightGrey);
+}
+
+.genealogy-manage-list .genealogy-manage-list-value {
+    line-height: 36px;
+    font-size: 1rem;
+}
+
+.genealogy-list .genealogy-list-title,
+.genealogy-manage-list .genealogy-manage-list-title,
+.genealogy-list-subtitle {
+    font-weight: 600;
+    line-height: 1.7;
+    color: var(--DarkBlue);
+    border-bottom: solid .5px var(--LightGrey);
+}
+
+.genealogy-list-subtitle { 
+    background-color: var(--LightGrey);
+    color: var(--Grey);
+    font-size: .8rem;
+    font-weight: 500;
+}
+
+.third-btn {
+    background-color: #fff;
+    border: 1.8px solid var(--Purple);
+    color: var(--Purple);
+    height: 1.8rem;
+    border-radius: 2rem;
+    font-size: 1rem;
+    font-weight: 400;
+    padding: 0 1rem;
+    margin-right: 1rem;
+}
+
+.third-btn:hover {
+    background-color: var(--DarkPurple) !important;
+    border-color: var(--DarkPurple) !important;
+}
+
+.third-btn:disabled,
+.third-btn[disabled] {
+    background-color: var(--Purple)!important;
+    border-color: var(--Purple) !important;
+    /* opacity: 1; */
+}
+
+.female .genealogy-list-value,
+.female.genealogy-list-value { 
+    color: var(--Purple);
+}
+
+.genealogy-manage-rename button {
+    height: 42px;
+    margin-top: 40px;
+}
+
+@media (max-width: 991px) {
+    .genealogy-manage-rename button {
+        margin-top: 0;
+    }
+}
+
+.manage-btn .fa-eye, 
+.manage-btn-danger .fa-pen-to-square, 
+.manage-btn-alert .fa-trash {
+    color: #FFF;
+    font-size: 1.2rem !important;
+    transform: none !important;
+}
+
+.genealogy-manage-rename #icon-div i {
+    right: 40px;
+}
