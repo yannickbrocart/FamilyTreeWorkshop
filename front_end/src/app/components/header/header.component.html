@@ -1,7 +1,6 @@
-<div *ngIf='(isLoggedIn$ | async); else logOut'>
+<div *ngIf='(isLoggedIn$ | async); else anonymousUser'>
     <app-logged-header></app-logged-header>
 </div>      
-<ng-template #logOut>     
-    <!-- <app-logged-header></app-logged-header> -->
+<ng-template #anonymousUser>     
     <app-anonymous-header></app-anonymous-header>
 </ng-template>

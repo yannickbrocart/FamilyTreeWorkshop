@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { LoggedHeaderComponent } from './logged-header.component';
+import { RouterTestingModule } from '@angular/router/testing'
 
 describe('LoggedHeaderComponent', () => {
   let component: LoggedHeaderComponent;
@@ -8,6 +8,7 @@ describe('LoggedHeaderComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
+      imports: [RouterTestingModule],
       declarations: [LoggedHeaderComponent]
     });
     fixture = TestBed.createComponent(LoggedHeaderComponent);

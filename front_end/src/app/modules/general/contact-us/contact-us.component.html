@@ -1,1 +1,62 @@
-<p>contact-us works!</p>
+<div class="container-snipet snipet-responsive">
+    <div class="snipet">
+        <h1>Contact us</h1>
+        <p class="form-label mb-3">Leave your message and we'll get back to you shortly.</p>
+        <!-- <app-contact-us> -->
+        <form [formGroup]='contactusForm' (ngSubmit)="onSubmitContactForm()">
+            <div class="row">
+                <div id="icon-div" class="mb-3 col-12 col-lg-6">
+                    <label for="firstname" class="form-label">First name</label>
+                    <input type="text" class="form-control form-control-lg" formControlName='firstname'>
+                    <i class="fa-solid icon-row" [ngClass]="{
+                        'fa-xmark': !contactusForm.controls.firstname.valid && contactusForm.controls.firstname.touched,
+                        'fa-check': contactusForm.controls.firstname.valid }"></i>
+                    </div>
+                <div id="icon-div" class="mb-3 col-12 col-lg-6">
+                    <label for="lastname" class="form-label">Last name</label>
+                    <input type="text" class="form-control form-control-lg" formControlName='lastname'>
+                    <i class="fa-solid icon-row" [ngClass]="{
+                        'fa-xmark': !contactusForm.controls.lastname.valid && contactusForm.controls.lastname.touched,
+                        'fa-check': contactusForm.controls.lastname.valid }"></i>
+                </div>
+            </div>
+            <div class="row">
+                <div id="icon-div" class="mb-3 col-12 col-lg-6">
+                    <label for="email" class="form-label">Email</label>
+                    <input type="email" class="form-control form-control-lg" formControlName='email'>
+                    <i class="fa-solid icon-row" [ngClass]="{
+                        'fa-xmark': !contactusForm.controls.email.valid && contactusForm.controls.email.touched,
+                        'fa-check': contactusForm.controls.email.valid }"></i>
+                </div>
+                <div id="icon-div" class="mb-3 col-12 col-lg-6">
+                    <label for="phone" class="form-label">Phone</label>
+                    <input type="text" class="form-control form-control-lg" formControlName='phone'>
+                    <i class="fa-solid icon-row" [ngClass]="{
+                        'fa-xmark': !contactusForm.controls.phone.valid && contactusForm.controls.phone.touched,
+                        'fa-check': contactusForm.controls.phone.valid }"></i>
+                </div>
+            </div>
+            <div id="icon-div" class="mb-3">
+                <label for="message" class="form-label">Message</label>
+                <textarea class="form-control form-control-lg" formControlName='message' rows="5"></textarea>
+                <i class="fa-solid icon-row" [ngClass]="{
+                    'fa-xmark': !contactusForm.controls.message.valid && contactusForm.controls.message.touched,
+                    'fa-check': contactusForm.controls.message.valid }"></i>
+            </div>
+            <div class="row">
+                <div id="icon-div" class="mb-4 col-12 col-lg-6">
+                    <label for="attachment" class="form-label">Attachment</label>
+                    <input class="form-control inputfile" type="file" formControlName='attachment'>
+                    <div id="attachmentHelp" class="form-text">
+                        Allowed file types: jpg, jpeg, png, gif, txt, pdf, doc, docx, xls, xlsx, odt, ppt, 
+                        pptx, pps, ppsx, html, and less than 25MB.</div>
+                </div>
+                <div class="d-grid gap-2 col-12 col-lg-6 align-items-end mb-lg-4">
+                    <button type="submit" class="btn btn-primary"
+                    [disabled]="!contactusForm.valid">Send</button>
+                </div>
+            </div>
+        </form>
+        <!-- </app-contact-us> -->
+    </div>
+</div>

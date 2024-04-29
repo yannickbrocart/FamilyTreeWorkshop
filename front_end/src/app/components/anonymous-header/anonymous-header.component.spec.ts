@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { AnonymousHeaderComponent } from './anonymous-header.component';
+import { HeaderComponent } from '../header/header.component';
+import { RouterTestingModule } from '@angular/router/testing'
 
 describe('AnonymousHeaderComponent', () => {
   let component: AnonymousHeaderComponent;
@@ -8,7 +9,8 @@ describe('AnonymousHeaderComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [AnonymousHeaderComponent]
+      imports: [RouterTestingModule],
+      declarations: [AnonymousHeaderComponent, HeaderComponent]
     });
     fixture = TestBed.createComponent(AnonymousHeaderComponent);
     component = fixture.componentInstance;
