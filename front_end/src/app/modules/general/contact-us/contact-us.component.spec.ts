@@ -5,10 +5,9 @@ import { ReactiveFormsModule } from '@angular/forms';
 describe('ContactUsComponent', () => {
   let component: ContactUsComponent;
   let fixture: ComponentFixture<ContactUsComponent>;
-
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [ReactiveFormsModule],
+      imports: [ReactiveFormsModule ],
       declarations: [ContactUsComponent]
     });
     fixture = TestBed.createComponent(ContactUsComponent);

@@ -3,6 +3,8 @@ import { HeaderComponent } from './header.component';
 import { AnonymousHeaderComponent } from '../anonymous-header/anonymous-header.component';
 import { LoggedHeaderComponent } from '../logged-header/logged-header.component';
 import { RouterTestingModule } from '@angular/router/testing'
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+
 
 describe('HeaderComponent', () => {
   let component: HeaderComponent;
@@ -10,8 +12,8 @@ describe('HeaderComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [RouterTestingModule],
-      declarations: [HeaderComponent, AnonymousHeaderComponent, LoggedHeaderComponent ]
+      imports: [RouterTestingModule, HttpClientTestingModule],
+      declarations: [HeaderComponent, AnonymousHeaderComponent, LoggedHeaderComponent]
     });
     fixture = TestBed.createComponent(HeaderComponent);
     component = fixture.componentInstance;

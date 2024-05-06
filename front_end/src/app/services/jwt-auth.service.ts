@@ -5,7 +5,7 @@ import { map, BehaviorSubject } from 'rxjs';
 
 const apiUrl = 'https://127.0.0.1:8000';
 const headers = new HttpHeaders()
-	.set("Content-Type", "application/json");
+  .set("Content-Type", "application/json");
 
 
 @Injectable({
@@ -19,27 +19,35 @@ export class JwtAuthService {
   constructor(private http: HttpClient, private router: Router) { }
 
   login(email: string, password: string) {
-    return this.http.post(apiUrl + '/login_check', { 'username': email, 'password' : password }).pipe(
-      map((response: any) => { 
+    return this.http.post(apiUrl + '/login_check', { 'username': email, 'password': password }).pipe(
+      map((response: any) => {
         this.loggedIn.next(true);
         localStorage.setItem('jwt', JSON.stringify(response));
-       }));
-   }
+      }));
+  }
 
-   logout() {
+  logout() {
     localStorage.removeItem('jwt');
     this.loggedIn.next(false);
     this.router.navigate(['/']);
-   }
-   
-   toggleShowPassword(showPassword: boolean): boolean {
+  }
+
+  get isLoggedIn() {
+    return this.loggedIn.asObservable();
+  }
+
+  toggleShowPassword(showPassword: boolean): boolean {
     return showPassword = !showPassword;
     this.eyeOn.style.display = showPassword ? 'block' : 'none';
     this.eyeOff.style.display = showPassword ? 'none' : 'block';
   }
 
-  get isLoggedIn() { 
-    return this.loggedIn.asObservable();
+  forgotPassword(email: string) {
+    return this.http.post(apiUrl + '/reset-password', { 'email': email });
+  }
+
+  resetPassword(token: string, newPassword: string) {
+    return this.http.post(apiUrl + '/reset-password/reset', { 'token' : token, 'newPassword': newPassword });
   }
 
 }

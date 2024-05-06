@@ -29,7 +29,6 @@ import { GenealogyManageComponent } from './modules/application/genealogy-manage
 import { GenealogyViewComponent } from './modules/application/genealogy-view/genealogy-view.component';
 import { GenealogyListsComponent } from './modules/application/genealogy-lists/genealogy-lists.component'
 
-
 @NgModule({
   declarations: [
     AppComponent,
@@ -65,9 +64,9 @@ import { GenealogyListsComponent } from './modules/application/genealogy-lists/g
     FormsModule,
     ReactiveFormsModule,
     FormsModule,
-    RouterModule
+    RouterModule,
   ],
-  providers: [],
+  providers: [HttpClientModule],
   bootstrap: [AppComponent],
 })
 export class AppModule { }
