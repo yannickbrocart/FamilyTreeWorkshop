@@ -3,6 +3,7 @@
 namespace Lexik\Bundle\JWTAuthenticationBundle;
 
 use Lexik\Bundle\JWTAuthenticationBundle\DependencyInjection\Compiler\ApiPlatformOpenApiPass;
+use Lexik\Bundle\JWTAuthenticationBundle\DependencyInjection\Compiler\CollectPayloadEnrichmentsPass;
 use Lexik\Bundle\JWTAuthenticationBundle\DependencyInjection\Compiler\DeprecateLegacyGuardAuthenticatorPass;
 use Lexik\Bundle\JWTAuthenticationBundle\DependencyInjection\Compiler\RegisterLegacyGuardAuthenticatorPass;
 use Lexik\Bundle\JWTAuthenticationBundle\DependencyInjection\Compiler\WireGenerateTokenCommandPass;
@@ -34,6 +35,7 @@ class LexikJWTAuthenticationBundle extends Bundle
         $container->addCompilerPass(new WireGenerateTokenCommandPass(), PassConfig::TYPE_BEFORE_OPTIMIZATION, 0);
         $container->addCompilerPass(new DeprecateLegacyGuardAuthenticatorPass(), PassConfig::TYPE_BEFORE_OPTIMIZATION, 0);
         $container->addCompilerPass(new ApiPlatformOpenApiPass(), PassConfig::TYPE_BEFORE_OPTIMIZATION, 0);
+        $container->addCompilerPass(new CollectPayloadEnrichmentsPass(), PassConfig::TYPE_BEFORE_OPTIMIZATION, 0);
 
         /** @var SecurityExtension $extension */
         $extension = $container->getExtension('security');

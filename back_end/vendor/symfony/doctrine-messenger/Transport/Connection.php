@@ -19,6 +19,7 @@ use Doctrine\DBAL\LockMode;
 use Doctrine\DBAL\Platforms\AbstractMySQLPlatform;
 use Doctrine\DBAL\Platforms\OraclePlatform;
 use Doctrine\DBAL\Platforms\PostgreSQLPlatform;
+use Doctrine\DBAL\Query\ForUpdate\ConflictResolutionMode;
 use Doctrine\DBAL\Query\QueryBuilder;
 use Doctrine\DBAL\Result;
 use Doctrine\DBAL\Schema\Schema;
@@ -154,6 +155,10 @@ class Connection implements ResetInterface
                 $this->driverConnection->delete($this->configuration['table_name'], ['delivered_at' => '9999-12-31 23:59:59']);
             } catch (DriverException $e) {
                 // Ignore the exception
+            } catch (TableNotFoundException $e) {
+                if ($this->autoSetup) {
+                    $this->setup();
+                }
             }
         }
 
@@ -178,15 +183,22 @@ class Connection implements ResetInterface
                     ->setParameters($query->getParameters(), $query->getParameterTypes());
 
                 if (method_exists(QueryBuilder::class, 'forUpdate')) {
-                    $query->forUpdate();
+                    $query->forUpdate(ConflictResolutionMode::SKIP_LOCKED);
                 }
 
                 $sql = $query->getSQL();
             } elseif (method_exists(QueryBuilder::class, 'forUpdate')) {
-                $query->forUpdate();
+                $query->forUpdate(ConflictResolutionMode::SKIP_LOCKED);
                 try {
                     $sql = $query->getSQL();
                 } catch (DBALException $e) {
+                    // If SKIP_LOCKED is not supported, fallback to without SKIP_LOCKED
+                    $query->forUpdate();
+
+                    try {
+                        $sql = $query->getSQL();
+                    } catch (DBALException $e) {
+                    }
                 }
             } elseif (preg_match('/FROM (.+) WHERE/', (string) $sql, $matches)) {
                 $fromClause = $matches[1];
@@ -277,7 +289,7 @@ class Connection implements ResetInterface
     {
         $configuration = $this->driverConnection->getConfiguration();
         $assetFilter = $configuration->getSchemaAssetsFilter();
-        $configuration->setSchemaAssetsFilter(static fn () => true);
+        $configuration->setSchemaAssetsFilter(fn (string $tableName) => $tableName === $this->configuration['table_name']);
         $this->updateSchema();
         $configuration->setSchemaAssetsFilter($assetFilter);
         $this->autoSetup = false;

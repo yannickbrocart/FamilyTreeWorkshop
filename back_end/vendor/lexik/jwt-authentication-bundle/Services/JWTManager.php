@@ -9,6 +9,7 @@ use Lexik\Bundle\JWTAuthenticationBundle\Event\JWTDecodedEvent;
 use Lexik\Bundle\JWTAuthenticationBundle\Event\JWTEncodedEvent;
 use Lexik\Bundle\JWTAuthenticationBundle\Events;
 use Lexik\Bundle\JWTAuthenticationBundle\Exception\JWTDecodeFailureException;
+use Lexik\Bundle\JWTAuthenticationBundle\Services\PayloadEnrichment\NullEnrichment;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\User\InMemoryUser;
@@ -46,14 +47,20 @@ class JWTManager implements JWTManagerInterface, JWTTokenManagerInterface
     protected $userIdClaim;
 
     /**
+     * @var PayloadEnrichmentInterface
+    */
+    private $payloadEnrichment;
+
+    /**
      * @param string|null $userIdClaim
      */
-    public function __construct(JWTEncoderInterface $encoder, EventDispatcherInterface $dispatcher, $userIdClaim = null)
+    public function __construct(JWTEncoderInterface $encoder, EventDispatcherInterface $dispatcher, $userIdClaim = null, PayloadEnrichmentInterface $payloadEnrichment = null)
     {
         $this->jwtEncoder = $encoder;
         $this->dispatcher = $dispatcher;
         $this->userIdentityField = 'username';
         $this->userIdClaim = $userIdClaim;
+        $this->payloadEnrichment = $payloadEnrichment ?? new NullEnrichment();
     }
 
     /**
@@ -63,6 +70,8 @@ class JWTManager implements JWTManagerInterface, JWTTokenManagerInterface
     {
         $payload = ['roles' => $user->getRoles()];
         $this->addUserIdentityToPayload($user, $payload);
+
+        $this->payloadEnrichment->enrich($user, $payload);
 
         return $this->generateJwtStringAndDispatchEvents($user, $payload);
     }
@@ -74,6 +83,8 @@ class JWTManager implements JWTManagerInterface, JWTTokenManagerInterface
     {
         $payload = array_merge(['roles' => $user->getRoles()], $payload);
         $this->addUserIdentityToPayload($user, $payload);
+
+        $this->payloadEnrichment->enrich($user, $payload);
 
         return $this->generateJwtStringAndDispatchEvents($user, $payload);
     }
@@ -144,7 +155,7 @@ class JWTManager implements JWTManagerInterface, JWTTokenManagerInterface
      */
     protected function addUserIdentityToPayload(UserInterface $user, array &$payload)
     {
-        $accessor      = PropertyAccess::createPropertyAccessor();
+        $accessor = PropertyAccess::createPropertyAccessor();
         $identityField = $this->userIdClaim ?: $this->userIdentityField;
 
         if ($user instanceof InMemoryUser && 'username' === $identityField) {

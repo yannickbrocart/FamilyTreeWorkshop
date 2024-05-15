@@ -169,6 +169,15 @@ class LexikJWTAuthenticationExtension extends Extension
         }
 
         $this->processWithWebTokenConfig($config, $container, $loader);
+
+        if ($this->isConfigEnabled($container, $config['blocklist_token'])) {
+            $loader->load('blocklist_token.xml');
+            $blockListTokenConfig = $config['blocklist_token'];
+            $container->setAlias('lexik_jwt_authentication.blocklist_token.cache', $blockListTokenConfig['cache']);
+        } else {
+            $container->getDefinition('lexik_jwt_authentication.payload_enrichment.random_jti_enrichment')
+                ->clearTag('lexik_jwt_authentication.payload_enrichment');
+        }
     }
 
     private function createTokenExtractors(ContainerBuilder $container, array $tokenExtractorsConfig): array

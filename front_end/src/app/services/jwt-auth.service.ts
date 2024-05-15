@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { map, BehaviorSubject } from 'rxjs';
+import { environment } from 'src/environments/environment';
 
-const apiUrl = 'https://127.0.0.1:8000';
 const headers = new HttpHeaders()
   .set("Content-Type", "application/json");
 
@@ -19,7 +19,7 @@ export class JwtAuthService {
   constructor(private http: HttpClient, private router: Router) { }
 
   login(email: string, password: string) {
-    return this.http.post(apiUrl + '/login_check', { 'username': email, 'password': password }).pipe(
+    return this.http.post(environment.apiURL + '/login_check', { 'username': email, 'password': password }).pipe(
       map((response: any) => {
         this.loggedIn.next(true);
         localStorage.setItem('jwt', JSON.stringify(response));
@@ -43,11 +43,21 @@ export class JwtAuthService {
   }
 
   forgotPassword(email: string) {
-    return this.http.post(apiUrl + '/reset-password', { 'email': email });
+    return this.http.post(environment.apiURL + '/reset-password', { 'email': email });
   }
 
   resetPassword(token: string, newPassword: string) {
-    return this.http.post(apiUrl + '/reset-password/reset', { 'token' : token, 'newPassword': newPassword });
+    return this.http.post(environment.apiURL + '/reset-password/reset', { 'token' : token, 'newPassword': newPassword });
+  }
+
+  signup(email: string, password: string, firstname: string, lastname: string, username: string) {
+    return this.http.post(environment.apiURL + '/register', { 
+      'email': email, 
+      'password' : password,
+      'firstname' : firstname,
+      'lastname' : lastname,
+      'username' : username
+      })
   }
 
 }

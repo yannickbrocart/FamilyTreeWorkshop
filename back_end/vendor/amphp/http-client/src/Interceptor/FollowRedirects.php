@@ -115,7 +115,9 @@ final class FollowRedirects implements ApplicationInterceptor
         return self::removeDotSegments(\implode('/', $parts));
     }
 
+    /** @var int */
     private $maxRedirects;
+    /** @var bool */
     private $autoReferrer;
 
     public function __construct(int $limit, bool $autoReferrer = true)
@@ -198,7 +200,9 @@ final class FollowRedirects implements ApplicationInterceptor
         if (!$isSameHost) {
             // Remove for security reasons, any interceptor headers will be added again,
             // but application headers will be discarded.
-            $request->setHeaders([]);
+            foreach ($request->getRawHeaders() as [$field]) {
+                $request->removeHeader($field);
+            }
         }
 
         if ($this->autoReferrer) {
@@ -229,7 +233,7 @@ final class FollowRedirects implements ApplicationInterceptor
         $destinationIsEncrypted = $followUri->getScheme() === 'https';
 
         if (!$referrerIsEncrypted || $destinationIsEncrypted) {
-            $request->setHeader('Referer', $referrerUri->withUserInfo('')->withFragment(''));
+            $request->setHeader('Referer', (string) $referrerUri->withUserInfo('')->withFragment(''));
         } else {
             $request->removeHeader('Referer');
         }

@@ -3,6 +3,7 @@
 namespace Amp\Http\Client\Connection;
 
 use Amp\CancellationToken;
+use Amp\Coroutine;
 use Amp\Deferred;
 use Amp\Http\Client\Internal\ForbidSerialization;
 use Amp\Http\Client\Request;
@@ -16,33 +17,6 @@ use function Amp\coroutine;
 final class ConnectionLimitingPool implements ConnectionPool
 {
     use ForbidSerialization;
-
-    /** @var int */
-    private $connectionLimit;
-
-    /** @var ConnectionFactory */
-    private $connectionFactory;
-
-    /** @var Promise[][] */
-    private $connections = [];
-
-    /** @var int[] */
-    private $activeRequestCounts = [];
-
-    /** @var Deferred[][] */
-    private $waiting = [];
-
-    /** @var bool[] */
-    private $waitForPriorConnection = [];
-
-    /** @var int */
-    private $totalConnectionAttempts = 0;
-
-    /** @var int */
-    private $totalStreamRequests = 0;
-
-    /** @var int */
-    private $openConnectionCount = 0;
 
     /**
      * Create a connection pool that limits the number of connections per authority.
@@ -69,8 +43,39 @@ final class ConnectionLimitingPool implements ConnectionPool
         $port = $uri->getPort() ?? $defaultPort;
 
         $authority = $host . ':' . $port;
+
         return $scheme . '://' . $authority;
     }
+
+    /** @var int */
+    private $connectionLimit;
+
+    /** @var ConnectionFactory */
+    private $connectionFactory;
+
+    /** @var array<string, \ArrayObject<int, Promise<Connection>>> */
+    private $connections = [];
+
+    /** @var Connection[] */
+    private $idleConnections = [];
+
+    /** @var int[] */
+    private $activeRequestCounts = [];
+
+    /** @var Deferred[][] */
+    private $waiting = [];
+
+    /** @var bool[] */
+    private $waitForPriorConnection = [];
+
+    /** @var int */
+    private $totalConnectionAttempts = 0;
+
+    /** @var int */
+    private $totalStreamRequests = 0;
+
+    /** @var int */
+    private $openConnectionCount = 0;
 
     private function __construct(int $connectionLimit, ?ConnectionFactory $connectionFactory = null)
     {
@@ -112,11 +117,17 @@ final class ConnectionLimitingPool implements ConnectionPool
 
             $uri = self::formatUri($request);
 
-            /** @var Stream $stream */
-            [$connection, $stream] = yield from $this->getStreamFor($uri, $request, $cancellation);
+            // Using new Coroutine avoids a bug on PHP < 7.4, see #265
+
+            /**
+             * @var Stream $stream
+             * @psalm-suppress all
+             */
+            [$connection, $stream] = yield new Coroutine($this->getStreamFor($uri, $request, $cancellation));
 
             $connectionId = \spl_object_id($connection);
             $this->activeRequestCounts[$connectionId] = ($this->activeRequestCounts[$connectionId] ?? 0) + 1;
+            unset($this->idleConnections[$connectionId]);
 
             return HttpStream::fromStream(
                 $stream,
@@ -235,6 +246,8 @@ final class ConnectionLimitingPool implements ConnectionPool
                 return;
             }
 
+            \assert($connection !== null);
+
             $this->openConnectionCount++;
 
             if ($isHttps) {
@@ -269,7 +282,8 @@ final class ConnectionLimitingPool implements ConnectionPool
 
             if ($stream === null) {
                 // Other requests used the new connection first, so we need to go around again.
-                return yield from $this->getStreamFor($uri, $request, $cancellation);
+                // Using new Coroutine avoids a bug on PHP < 7.4, see #265
+                return yield new Coroutine($this->getStreamFor($uri, $request, $cancellation));
             }
         }
 
@@ -295,6 +309,15 @@ final class ConnectionLimitingPool implements ConnectionPool
         $connectionId = \spl_object_id($connection);
         if (isset($this->activeRequestCounts[$connectionId])) {
             $this->activeRequestCounts[$connectionId]--;
+
+            if ($this->activeRequestCounts[$connectionId] === 0) {
+                while (\count($this->idleConnections) > 64) { // not customizable for now
+                    $idleConnection = \array_shift($this->idleConnections);
+                    $idleConnection->close();
+                }
+
+                $this->idleConnections[$connectionId] = $connection;
+            }
         }
 
         if (empty($this->waiting[$uri])) {
@@ -328,9 +351,9 @@ final class ConnectionLimitingPool implements ConnectionPool
 
     private function dropConnection(string $uri, int $connectionId): void
     {
-        unset($this->connections[$uri][$connectionId], $this->activeRequestCounts[$connectionId]);
+        unset($this->connections[$uri][$connectionId], $this->activeRequestCounts[$connectionId], $this->idleConnections[$connectionId]);
 
-        if (empty($this->connections[$uri])) {
+        if ($this->connections[$uri]->count() === 0) {
             unset($this->connections[$uri], $this->waitForPriorConnection[$uri]);
         }
     }

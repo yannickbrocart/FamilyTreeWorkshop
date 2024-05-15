@@ -1,1 +1,76 @@
-<p>signup works!</p>
+<div class="container-snipet snipet-responsive">
+    <div class="snipet">
+        <h1>Sign up</h1>
+        <p class="form-label mb-3">Sign up using your email.<br>
+        All informations are required!</p>
+        <!-- <app-signup> -->
+        <form [formGroup]='signupForm' (ngSubmit)="onSubmitSignupForm()">
+            <div class="row">
+                <div id="icon-div" class="col-12 col-lg-6 mb-3">
+                    <label for="email" class="form-label">Email</label>
+                    <input type="email" class="form-control form-control-lg" formControlName='email'>
+                    <i class="fa-solid icon-row" [ngClass]="{
+                        'fa-xmark': !signupForm.controls.email.valid && signupForm.controls.email.touched,
+                        'fa-check': signupForm.controls.email.valid }"></i>
+                </div>
+                <div id="icon-div" class="col-12 col-lg-6 mb-3">
+                    <label for="username" class="form-label">Username</label>
+                    <input type="text" class="form-control form-control-lg" formControlName='username'>
+                    <i class="fa-solid icon-row" [ngClass]="{
+                        'fa-xmark': !signupForm.controls.username.valid && signupForm.controls.username.touched,
+                        'fa-check': signupForm.controls.username.valid }"></i>
+                </div>
+            </div>
+            <div class="row">
+                <div id="icon-div" class="col-12 col-lg-6 mb-3">
+                    <label for="password" class="form-label d-flex justify-content-between">Password</label>
+                    <input [type]="showPassword ? 'text' : 'password'" class="form-control form-control-lg" formControlName='password'>
+                    <i class="fa-solid icon-row" [ngClass]="{
+                        'fa-eye-slash': !showPassword, 
+                        'fa-eye': showPassword,
+                        'xmark-color': !signupForm.controls.password.valid && signupForm.controls.password.touched,
+                        'check-color': signupForm.controls.password.valid }" 
+                        (click)="showPassword = jwtAuthService.toggleShowPassword(showPassword)"></i>
+                    <div id="emailHelp" class="form-text">
+                        Password must be at least 12 caracters long and contain  
+                        both letters (in upper and lower case), number and special 
+                        character but cannot contain spaces.</div>
+                </div>
+                <div id="icon-div" class="col-12 col-lg-6 mb-3">
+                    <label for="password" class="form-label d-flex justify-content-between">Confirm password</label>
+                    <input [type]="showPassword ? 'text' : 'password'" class="form-control form-control-lg" formControlName='confirmPassword'>
+                    <i class="fa-solid icon-row" [ngClass]="{
+                        'fa-eye-slash': !showPassword, 
+                        'fa-eye': showPassword,
+                        'xmark-color': !signupForm.controls.confirmPassword.valid && signupForm.controls.confirmPassword.touched,
+                        'zz-color': signupForm.controls.confirmPassword.errors && !signupForm.controls.confirmPassword,
+                        'check-color': signupForm.controls.confirmPassword.valid && !signupForm.controls.confirmPassword.errors }" 
+                        (click)="showPassword = jwtAuthService.toggleShowPassword(showPassword)"></i>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div id="icon-div" class="col-12 col-lg-6 mb-3">
+                    <label for="firstname" class="form-label">Firstname</label>
+                    <input type="text" class="form-control form-control-lg" formControlName='firstname'>
+                    <i class="fa-solid icon-row" [ngClass]="{
+                        'fa-xmark': !signupForm.controls.firstname.valid && signupForm.controls.firstname.touched,
+                        'fa-check': signupForm.controls.firstname.valid }"></i>
+                </div>
+                <div id="icon-div" class="col-12 col-lg-6 mb-3">
+                    <label for="lastname" class="form-label">Lastname</label>
+                    <input type="text" class="form-control form-control-lg" formControlName='lastname'>
+                    <i class="fa-solid icon-row" [ngClass]="{
+                        'fa-xmark': !signupForm.controls.lastname.valid && signupForm.controls.lastname.touched,
+                        'fa-check': signupForm.controls.lastname.valid }"></i>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-12 col-lg-6 d-grid">
+                    <button type="submit" class="btn btn-primary"
+                    [disabled]="!signupForm.valid">Create account</button>
+                </div>
+            </div>
+        </form>
+        <!-- </app-signup> -->
+    </div>
+</div>
