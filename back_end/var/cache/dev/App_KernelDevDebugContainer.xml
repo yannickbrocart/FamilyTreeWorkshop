@@ -272,11 +272,9 @@
     <parameter key="lexik_jwt_authentication.pass_phrase">%env(JWT_PASSPHRASE)%</parameter>
     <parameter key="lexik_jwt_authentication.token_ttl">3600</parameter>
     <parameter key="lexik_jwt_authentication.clock_skew">0</parameter>
-    <parameter key="lexik_jwt_authentication.user_identity_field">username</parameter>
     <parameter key="lexik_jwt_authentication.allow_no_expiration">false</parameter>
     <parameter key="lexik_jwt_authentication.user_id_claim">username</parameter>
     <parameter key="lexik_jwt_authentication.encoder.signature_algorithm">RS256</parameter>
-    <parameter key="lexik_jwt_authentication.encoder.crypto_engine">openssl</parameter>
     <parameter key="nelmio_cors.map" type="collection">
       <parameter key="^/" type="collection">
         <parameter key="skip_same_as_origin">true</parameter>
@@ -413,6 +411,23 @@
       <tag name="controller.service_arguments"/>
       <tag name="routing.route_loader"/>
     </service>
+    <service id="App\Entity" class="App\Entity" abstract="true">
+      <tag name="container.excluded" source="in &quot;config/services.yaml&quot;"/>
+    </service>
+    <service id="App\Controller\DataController" class="App\Controller\DataController" public="true" autowire="true" autoconfigure="true">
+      <tag name="controller.service_arguments"/>
+      <tag name="container.service_subscriber"/>
+      <call method="setContainer">
+        <argument type="service" id=".service_locator.jUv.zyj.App\Controller\DataController"/>
+      </call>
+    </service>
+    <service id="App\Controller\Files\ImportGedcomFileController" class="App\Controller\Files\ImportGedcomFileController" public="true" autowire="true" autoconfigure="true">
+      <tag name="controller.service_arguments"/>
+      <tag name="container.service_subscriber"/>
+      <call method="setContainer">
+        <argument type="service" id=".service_locator.jUv.zyj.App\Controller\Files\ImportGedcomFileController"/>
+      </call>
+    </service>
     <service id="App\Controller\RegistrationController" class="App\Controller\RegistrationController" public="true" autowire="true" autoconfigure="true">
       <tag name="controller.service_arguments"/>
       <tag name="container.service_subscriber"/>
@@ -433,15 +448,62 @@
     <service id="App\DataFixtures\AppFixtures" class="App\DataFixtures\AppFixtures" autowire="true" autoconfigure="true">
       <tag name="doctrine.fixture.orm"/>
     </service>
+    <service id="App\DataFixtures\GedcomFixtures" class="App\DataFixtures\GedcomFixtures" autowire="true" autoconfigure="true">
+      <tag name="doctrine.fixture.orm"/>
+    </service>
+    <service id="App\DataFixtures\PlaceFixtures" class="App\DataFixtures\PlaceFixtures" autowire="true" autoconfigure="true">
+      <tag name="doctrine.fixture.orm"/>
+    </service>
     <service id="App\DataFixtures\UserFixtures" class="App\DataFixtures\UserFixtures" autowire="true" autoconfigure="true">
       <tag name="doctrine.fixture.orm"/>
       <argument type="service" id="security.user_password_hasher"/>
     </service>
-    <service id="App\Entity\ResetPasswordRequest" class="App\Entity\ResetPasswordRequest" autowire="true" autoconfigure="true">
-      <tag name="container.error" message="Cannot autowire service &quot;App\Entity\ResetPasswordRequest&quot;: argument &quot;$user&quot; of method &quot;__construct()&quot; is type-hinted &quot;object&quot;, you should configure its value explicitly."/>
+    <service id="App\Parser\ParseCommon" class="App\Parser\ParseCommon" autowire="true" autoconfigure="true"/>
+    <service id="App\Parser\ParseFamily" class="App\Parser\ParseFamily" autowire="true" autoconfigure="true"/>
+    <service id="App\Parser\ParseGedcomToModel" class="App\Parser\ParseGedcomToModel" autowire="true" autoconfigure="true"/>
+    <service id="App\Parser\ParseHeader" class="App\Parser\ParseHeader" autowire="true" autoconfigure="true"/>
+    <service id="App\Parser\ParseIndividual" class="App\Parser\ParseIndividual" autowire="true" autoconfigure="true"/>
+    <service id="App\Repository\ComponentLevelDataTypes\EventDetailRepository" class="App\Repository\ComponentLevelDataTypes\EventDetailRepository" autowire="true" autoconfigure="true">
+      <tag name="doctrine.repository_service"/>
+      <argument type="service" id="doctrine"/>
     </service>
-    <service id="App\Entity\User" class="App\Entity\User" autowire="true" autoconfigure="true"/>
+    <service id="App\Repository\ComponentLevelDataTypes\IndividualEventDetailRepository" class="App\Repository\ComponentLevelDataTypes\IndividualEventDetailRepository" autowire="true" autoconfigure="true">
+      <tag name="doctrine.repository_service"/>
+      <argument type="service" id="doctrine"/>
+    </service>
+    <service id="App\Repository\ComponentLevelDataTypes\IndividualEventsRepository" class="App\Repository\ComponentLevelDataTypes\IndividualEventsRepository" autowire="true" autoconfigure="true">
+      <tag name="doctrine.repository_service"/>
+      <argument type="service" id="doctrine"/>
+    </service>
+    <service id="App\Repository\ComponentLevelDataTypes\NamePieceRepository" class="App\Repository\ComponentLevelDataTypes\NamePieceRepository" autowire="true" autoconfigure="true">
+      <tag name="doctrine.repository_service"/>
+      <argument type="service" id="doctrine"/>
+    </service>
+    <service id="App\Repository\ComponentLevelDataTypes\NameRepository" class="App\Repository\ComponentLevelDataTypes\NameRepository" autowire="true" autoconfigure="true">
+      <tag name="doctrine.repository_service"/>
+      <argument type="service" id="doctrine"/>
+    </service>
+    <service id="App\Repository\ComponentLevelDataTypes\PlaceRepository" class="App\Repository\ComponentLevelDataTypes\PlaceRepository" autowire="true" autoconfigure="true">
+      <tag name="doctrine.repository_service"/>
+      <argument type="service" id="doctrine"/>
+    </service>
+    <service id="App\Repository\GedcomRepository" class="App\Repository\GedcomRepository" autowire="true" autoconfigure="true">
+      <tag name="doctrine.repository_service"/>
+      <argument type="service" id="doctrine"/>
+    </service>
     <service id="App\Repository\ResetPasswordRequestRepository" class="App\Repository\ResetPasswordRequestRepository" autowire="true" autoconfigure="true">
+      <tag name="doctrine.repository_service"/>
+      <argument type="service" id="doctrine"/>
+    </service>
+    <service id="App\Repository\TopLevelDataTypes\FamilyRepository" class="App\Repository\TopLevelDataTypes\FamilyRepository" autowire="true" autoconfigure="true">
+      <tag name="doctrine.repository_service"/>
+      <argument type="service" id="doctrine"/>
+    </service>
+    <service id="App\Repository\TopLevelDataTypes\HeaderRepository" class="App\Repository\TopLevelDataTypes\HeaderRepository" autowire="true" autoconfigure="true">
+      <tag name="doctrine.repository_service"/>
+      <argument type="service" id="doctrine"/>
+    </service>
+    <service id="App\Repository\TopLevelDataTypes\IndividualRepository" class="App\Repository\TopLevelDataTypes\IndividualRepository" autowire="true" autoconfigure="true">
       <tag name="doctrine.repository_service"/>
       <argument type="service" id="doctrine"/>
     </service>
@@ -453,6 +515,9 @@
       <argument type="service" id="symfonycasts.verify_email.helper"/>
       <argument type="service" id="mailer.mailer"/>
       <argument type="service" id="doctrine.orm.default_entity_manager"/>
+    </service>
+    <service id="App\Serializer\SerializeModel" class="App\Serializer\SerializeModel" autowire="true" autoconfigure="true">
+      <argument type="service" id="debug.serializer"/>
     </service>
     <service id="argument_metadata_factory" class="Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadataFactory"/>
     <service id="argument_resolver.backed_enum_resolver" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\BackedEnumValueResolver">
@@ -481,7 +546,7 @@
     </service>
     <service id="argument_resolver.service" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\ServiceValueResolver">
       <tag priority="-50" name="Symfony\Component\HttpKernel\Controller\ArgumentResolver\ServiceValueResolver">controller.argument_value_resolver</tag>
-      <argument type="service" id=".service_locator.L076gq0"/>
+      <argument type="service" id=".service_locator.PhJR_UQ"/>
     </service>
     <service id="argument_resolver.default" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\DefaultValueResolver">
       <tag priority="-100" name="Symfony\Component\HttpKernel\Controller\ArgumentResolver\DefaultValueResolver">controller.argument_value_resolver</tag>
@@ -3411,7 +3476,7 @@
     </service>
     <service id="argument_resolver.not_tagged_controller" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\NotTaggedControllerValueResolver">
       <tag name="controller.argument_value_resolver" priority="-200"/>
-      <argument type="service" id=".service_locator.L076gq0"/>
+      <argument type="service" id=".service_locator.PhJR_UQ"/>
     </service>
     <service id="debug.log_processor" class="Symfony\Bridge\Monolog\Processor\DebugProcessor">
       <tag name="kernel.reset" method="reset"/>
@@ -5127,7 +5192,7 @@
     <service id="doctrine.orm.configuration" class="Doctrine\ORM\Configuration" abstract="true"/>
     <service id="doctrine.orm.entity_manager.abstract" class="Doctrine\ORM\EntityManager" lazy="true" abstract="true"/>
     <service id="doctrine.orm.container_repository_factory" class="Doctrine\Bundle\DoctrineBundle\Repository\ContainerRepositoryFactory">
-      <argument type="service" id=".service_locator.N41nchi"/>
+      <argument type="service" id=".service_locator.4OG3fHu"/>
     </service>
     <service id="doctrine.orm.manager_configurator.abstract" class="Doctrine\Bundle\DoctrineBundle\ManagerConfigurator" abstract="true">
       <argument type="collection"/>
@@ -7160,6 +7225,14 @@
             <argument key="groups" type="collection"/>
           </argument>
           <argument type="collection">
+            <argument key="fixture" type="service" id="App\DataFixtures\GedcomFixtures"/>
+            <argument key="groups" type="collection"/>
+          </argument>
+          <argument type="collection">
+            <argument key="fixture" type="service" id="App\DataFixtures\PlaceFixtures"/>
+            <argument key="groups" type="collection"/>
+          </argument>
+          <argument type="collection">
             <argument key="fixture" type="service" id="App\DataFixtures\UserFixtures"/>
             <argument key="groups" type="collection"/>
           </argument>
@@ -7169,52 +7242,11 @@
     <service id="doctrine.fixtures.purger.orm_purger_factory" class="Doctrine\Bundle\FixturesBundle\Purger\ORMPurgerFactory">
       <tag name="doctrine.fixtures.purger_factory" alias="default"/>
     </service>
-    <service id="lexik_jwt_authentication.security.authentication.provider" class="Lexik\Bundle\JWTAuthenticationBundle\Security\Authentication\Provider\JWTProvider">
-      <argument></argument>
-      <argument type="service" id="lexik_jwt_authentication.jwt_manager"/>
-      <argument type="service" id="debug.event_dispatcher"/>
-      <argument>username</argument>
-      <call method="setUserIdentityField">
-        <argument>username</argument>
-      </call>
-      <deprecated package="lexik/jwt-authentication-bundle" version="2.0">The "%service_id%" service is deprecated since LexikJWTAuthenticationBundle version 2.0 and will be removed in 3.0</deprecated>
-    </service>
-    <service id="lexik_jwt_authentication.security.authentication.listener" class="Lexik\Bundle\JWTAuthenticationBundle\Security\Firewall\JWTListener">
-      <argument type="service" id="security.token_storage"/>
-      <argument type="service" id="security.authentication.manager"/>
-      <argument></argument>
-      <call method="setDispatcher">
-        <argument type="service" id="debug.event_dispatcher"/>
-      </call>
-      <deprecated package="lexik/jwt-authentication-bundle" version="2.0">The "%service_id%" service is deprecated since LexikJWTAuthenticationBundle version 2.0 and will be removed in 3.0</deprecated>
-    </service>
-    <service id="lexik_jwt_authentication.security.authentication.entry_point" class="Lexik\Bundle\JWTAuthenticationBundle\Security\Http\EntryPoint\JWTEntryPoint">
-      <deprecated package="lexik/jwt-authentication-bundle" version="2.0">The "%service_id%" service is deprecated since LexikJWTAuthenticationBundle version 2.0 and will be removed in 3.0</deprecated>
-    </service>
-    <service id="lexik_jwt_authentication.key_loader.openssl" class="Lexik\Bundle\JWTAuthenticationBundle\Services\KeyLoader\OpenSSLKeyLoader">
-      <argument></argument>
-      <argument></argument>
-      <argument>%env(JWT_PASSPHRASE)%</argument>
-      <argument type="collection"/>
-      <deprecated package="lexik/jwt-authentication-bundle" version="2.5">The "%service_id%" service is deprecated since version 2.5 and will be removed in 3.0. Use lexik_jwt_authentication.key_loader.raw instead.</deprecated>
-    </service>
-    <service id="lexik_jwt_authentication.jws_provider.default" class="Lexik\Bundle\JWTAuthenticationBundle\Services\JWSProvider\DefaultJWSProvider">
-      <argument type="service" id="lexik_jwt_authentication.key_loader.raw"/>
-      <argument>openssl</argument>
-      <argument>RS256</argument>
-      <argument>3600</argument>
-      <argument>0</argument>
-      <deprecated package="lexik/jwt-authentication-bundle" version="2.5">The "%service_id%" is deprecated since version 2.5 and will be removed in 5.0, use "lexik_jwt_authentication.jws_provider.lcobucci" instead.</deprecated>
-    </service>
     <service id="lexik_jwt_authentication.jwt_manager" class="Lexik\Bundle\JWTAuthenticationBundle\Services\JWTManager" public="true">
       <argument type="service" id="lexik_jwt_authentication.encoder.lcobucci"/>
       <argument type="service" id="debug.event_dispatcher"/>
       <argument>username</argument>
       <argument type="service" id="lexik_jwt_authentication.payload_enrichment"/>
-      <call method="setUserIdentityField">
-        <argument>username</argument>
-        <argument>false</argument>
-      </call>
     </service>
     <service id="lexik_jwt_authentication.payload_enrichment.random_jti_enrichment" class="Lexik\Bundle\JWTAuthenticationBundle\Services\PayloadEnrichment\RandomJtiEnrichment"/>
     <service id="lexik_jwt_authentication.payload_enrichment" class="Lexik\Bundle\JWTAuthenticationBundle\Services\PayloadEnrichment\ChainEnrichment">
@@ -7232,15 +7264,11 @@
       <argument>%env(JWT_PASSPHRASE)%</argument>
       <argument type="collection"/>
     </service>
-    <service id="lexik_jwt_authentication.encoder.default" class="Lexik\Bundle\JWTAuthenticationBundle\Encoder\DefaultEncoder">
-      <argument type="service" id="lexik_jwt_authentication.jws_provider.default"/>
-    </service>
     <service id="lexik_jwt_authentication.encoder.lcobucci" class="Lexik\Bundle\JWTAuthenticationBundle\Encoder\LcobucciJWTEncoder">
       <argument type="service" id="lexik_jwt_authentication.jws_provider.lcobucci"/>
     </service>
     <service id="lexik_jwt_authentication.jws_provider.lcobucci" class="Lexik\Bundle\JWTAuthenticationBundle\Services\JWSProvider\LcobucciJWSProvider">
       <argument type="service" id="lexik_jwt_authentication.key_loader.raw"/>
-      <argument>openssl</argument>
       <argument>RS256</argument>
       <argument>3600</argument>
       <argument>0</argument>
@@ -7285,14 +7313,6 @@
     </service>
     <service id="lexik_jwt_authentication.security.jwt_user_provider" class="Lexik\Bundle\JWTAuthenticationBundle\Security\User\JWTUserProvider">
       <argument></argument>
-    </service>
-    <service id=".1_TokenStorage~KCMl34D" class="Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage"/>
-    <service id="lexik_jwt_authentication.security.guard.jwt_token_authenticator" class="Lexik\Bundle\JWTAuthenticationBundle\Security\Guard\JWTTokenAuthenticator">
-      <argument type="service" id="lexik_jwt_authentication.jwt_manager"/>
-      <argument type="service" id="debug.event_dispatcher"/>
-      <argument type="service" id="lexik_jwt_authentication.extractor.chain_extractor"/>
-      <argument type="service" id=".1_TokenStorage~KCMl34D"/>
-      <argument type="service" id="translator.data_collector" on-invalid="null"/>
     </service>
     <service id="lexik_jwt_authentication.check_config_command" class="Lexik\Bundle\JWTAuthenticationBundle\Command\CheckConfigCommand">
       <tag name="console.command" command="lexik:jwt:check-config"/>
@@ -7423,6 +7443,12 @@
       <argument type="service" id="symfonycasts.verify_email.token_generator"/>
       <argument>3600</argument>
     </service>
+    <service id=".instanceof.Symfony\Contracts\Service\ServiceSubscriberInterface.0.App\Controller\DataController" class="App\Controller\DataController" autowire="true" abstract="true"/>
+    <service id=".instanceof.Symfony\Bundle\FrameworkBundle\Controller\AbstractController.0.App\Controller\DataController" class="App\Controller\DataController" autowire="true" abstract="true"/>
+    <service id=".abstract.instanceof.App\Controller\DataController" class="App\Controller\DataController" autowire="true" autoconfigure="true" abstract="true"/>
+    <service id=".instanceof.Symfony\Contracts\Service\ServiceSubscriberInterface.0.App\Controller\Files\ImportGedcomFileController" class="App\Controller\Files\ImportGedcomFileController" autowire="true" abstract="true"/>
+    <service id=".instanceof.Symfony\Bundle\FrameworkBundle\Controller\AbstractController.0.App\Controller\Files\ImportGedcomFileController" class="App\Controller\Files\ImportGedcomFileController" autowire="true" abstract="true"/>
+    <service id=".abstract.instanceof.App\Controller\Files\ImportGedcomFileController" class="App\Controller\Files\ImportGedcomFileController" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.Symfony\Contracts\Service\ServiceSubscriberInterface.0.App\Controller\RegistrationController" class="App\Controller\RegistrationController" autowire="true" abstract="true"/>
     <service id=".instanceof.Symfony\Bundle\FrameworkBundle\Controller\AbstractController.0.App\Controller\RegistrationController" class="App\Controller\RegistrationController" autowire="true" abstract="true"/>
     <service id=".abstract.instanceof.App\Controller\RegistrationController" class="App\Controller\RegistrationController" autowire="true" autoconfigure="true" abstract="true"/>
@@ -7431,10 +7457,34 @@
     <service id=".abstract.instanceof.App\Controller\ResetPasswordController" class="App\Controller\ResetPasswordController" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.Doctrine\Bundle\FixturesBundle\ORMFixtureInterface.0.App\DataFixtures\AppFixtures" class="App\DataFixtures\AppFixtures" autowire="true" abstract="true"/>
     <service id=".abstract.instanceof.App\DataFixtures\AppFixtures" class="App\DataFixtures\AppFixtures" autowire="true" autoconfigure="true" abstract="true"/>
+    <service id=".instanceof.Doctrine\Bundle\FixturesBundle\ORMFixtureInterface.0.App\DataFixtures\GedcomFixtures" class="App\DataFixtures\GedcomFixtures" autowire="true" abstract="true"/>
+    <service id=".abstract.instanceof.App\DataFixtures\GedcomFixtures" class="App\DataFixtures\GedcomFixtures" autowire="true" autoconfigure="true" abstract="true"/>
+    <service id=".instanceof.Doctrine\Bundle\FixturesBundle\ORMFixtureInterface.0.App\DataFixtures\PlaceFixtures" class="App\DataFixtures\PlaceFixtures" autowire="true" abstract="true"/>
+    <service id=".abstract.instanceof.App\DataFixtures\PlaceFixtures" class="App\DataFixtures\PlaceFixtures" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.Doctrine\Bundle\FixturesBundle\ORMFixtureInterface.0.App\DataFixtures\UserFixtures" class="App\DataFixtures\UserFixtures" autowire="true" abstract="true"/>
     <service id=".abstract.instanceof.App\DataFixtures\UserFixtures" class="App\DataFixtures\UserFixtures" autowire="true" autoconfigure="true" abstract="true"/>
+    <service id=".instanceof.Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepositoryInterface.0.App\Repository\ComponentLevelDataTypes\EventDetailRepository" class="App\Repository\ComponentLevelDataTypes\EventDetailRepository" autowire="true" abstract="true"/>
+    <service id=".abstract.instanceof.App\Repository\ComponentLevelDataTypes\EventDetailRepository" class="App\Repository\ComponentLevelDataTypes\EventDetailRepository" autowire="true" autoconfigure="true" abstract="true"/>
+    <service id=".instanceof.Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepositoryInterface.0.App\Repository\ComponentLevelDataTypes\IndividualEventDetailRepository" class="App\Repository\ComponentLevelDataTypes\IndividualEventDetailRepository" autowire="true" abstract="true"/>
+    <service id=".abstract.instanceof.App\Repository\ComponentLevelDataTypes\IndividualEventDetailRepository" class="App\Repository\ComponentLevelDataTypes\IndividualEventDetailRepository" autowire="true" autoconfigure="true" abstract="true"/>
+    <service id=".instanceof.Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepositoryInterface.0.App\Repository\ComponentLevelDataTypes\IndividualEventsRepository" class="App\Repository\ComponentLevelDataTypes\IndividualEventsRepository" autowire="true" abstract="true"/>
+    <service id=".abstract.instanceof.App\Repository\ComponentLevelDataTypes\IndividualEventsRepository" class="App\Repository\ComponentLevelDataTypes\IndividualEventsRepository" autowire="true" autoconfigure="true" abstract="true"/>
+    <service id=".instanceof.Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepositoryInterface.0.App\Repository\ComponentLevelDataTypes\NamePieceRepository" class="App\Repository\ComponentLevelDataTypes\NamePieceRepository" autowire="true" abstract="true"/>
+    <service id=".abstract.instanceof.App\Repository\ComponentLevelDataTypes\NamePieceRepository" class="App\Repository\ComponentLevelDataTypes\NamePieceRepository" autowire="true" autoconfigure="true" abstract="true"/>
+    <service id=".instanceof.Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepositoryInterface.0.App\Repository\ComponentLevelDataTypes\NameRepository" class="App\Repository\ComponentLevelDataTypes\NameRepository" autowire="true" abstract="true"/>
+    <service id=".abstract.instanceof.App\Repository\ComponentLevelDataTypes\NameRepository" class="App\Repository\ComponentLevelDataTypes\NameRepository" autowire="true" autoconfigure="true" abstract="true"/>
+    <service id=".instanceof.Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepositoryInterface.0.App\Repository\ComponentLevelDataTypes\PlaceRepository" class="App\Repository\ComponentLevelDataTypes\PlaceRepository" autowire="true" abstract="true"/>
+    <service id=".abstract.instanceof.App\Repository\ComponentLevelDataTypes\PlaceRepository" class="App\Repository\ComponentLevelDataTypes\PlaceRepository" autowire="true" autoconfigure="true" abstract="true"/>
+    <service id=".instanceof.Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepositoryInterface.0.App\Repository\GedcomRepository" class="App\Repository\GedcomRepository" autowire="true" abstract="true"/>
+    <service id=".abstract.instanceof.App\Repository\GedcomRepository" class="App\Repository\GedcomRepository" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepositoryInterface.0.App\Repository\ResetPasswordRequestRepository" class="App\Repository\ResetPasswordRequestRepository" autowire="true" abstract="true"/>
     <service id=".abstract.instanceof.App\Repository\ResetPasswordRequestRepository" class="App\Repository\ResetPasswordRequestRepository" autowire="true" autoconfigure="true" abstract="true"/>
+    <service id=".instanceof.Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepositoryInterface.0.App\Repository\TopLevelDataTypes\FamilyRepository" class="App\Repository\TopLevelDataTypes\FamilyRepository" autowire="true" abstract="true"/>
+    <service id=".abstract.instanceof.App\Repository\TopLevelDataTypes\FamilyRepository" class="App\Repository\TopLevelDataTypes\FamilyRepository" autowire="true" autoconfigure="true" abstract="true"/>
+    <service id=".instanceof.Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepositoryInterface.0.App\Repository\TopLevelDataTypes\HeaderRepository" class="App\Repository\TopLevelDataTypes\HeaderRepository" autowire="true" abstract="true"/>
+    <service id=".abstract.instanceof.App\Repository\TopLevelDataTypes\HeaderRepository" class="App\Repository\TopLevelDataTypes\HeaderRepository" autowire="true" autoconfigure="true" abstract="true"/>
+    <service id=".instanceof.Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepositoryInterface.0.App\Repository\TopLevelDataTypes\IndividualRepository" class="App\Repository\TopLevelDataTypes\IndividualRepository" autowire="true" abstract="true"/>
+    <service id=".abstract.instanceof.App\Repository\TopLevelDataTypes\IndividualRepository" class="App\Repository\TopLevelDataTypes\IndividualRepository" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepositoryInterface.0.App\Repository\UserRepository" class="App\Repository\UserRepository" autowire="true" abstract="true"/>
     <service id=".abstract.instanceof.App\Repository\UserRepository" class="App\Repository\UserRepository" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".service_locator.bJ.4HC5" class="Symfony\Component\DependencyInjection\ServiceLocator">
@@ -7860,11 +7910,26 @@
         <argument key="loader" type="service_closure" id=".errored..service_locator.y4_Zrx..Symfony\Component\Config\Loader\LoaderInterface"/>
       </argument>
     </service>
+    <service id=".service_locator.n.m5dth" class="Symfony\Component\DependencyInjection\ServiceLocator">
+      <tag name="container.service_locator"/>
+      <argument type="collection">
+        <argument key="gedcomRepository" type="service_closure" id="App\Repository\GedcomRepository"/>
+        <argument key="serializeModel" type="service_closure" id="App\Serializer\SerializeModel"/>
+      </argument>
+    </service>
+    <service id=".service_locator.2UVx68m" class="Symfony\Component\DependencyInjection\ServiceLocator">
+      <tag name="container.service_locator"/>
+      <argument type="collection">
+        <argument key="em" type="service_closure" id="doctrine.orm.default_entity_manager"/>
+        <argument key="parseGedcomToModel" type="service_closure" id="App\Parser\ParseGedcomToModel"/>
+        <argument key="serializeModel" type="service_closure" id="App\Serializer\SerializeModel"/>
+      </argument>
+    </service>
     <service id=".service_locator.URv18j3" class="Symfony\Component\DependencyInjection\ServiceLocator">
       <tag name="container.service_locator"/>
       <argument type="collection">
         <argument key="entityManager" type="service_closure" id="doctrine.orm.default_entity_manager"/>
-        <argument key="user" type="service_closure" id="App\Entity\User"/>
+        <argument key="user" type="service_closure" id=".errored..service_locator.URv18j3.App\Entity\User"/>
         <argument key="userPasswordHasher" type="service_closure" id="security.user_password_hasher"/>
       </argument>
     </service>
@@ -7887,9 +7952,14 @@
         <argument key="passwordHasher" type="service_closure" id="security.user_password_hasher"/>
       </argument>
     </service>
-    <service id=".service_locator.L076gq0" class="Symfony\Component\DependencyInjection\ServiceLocator">
+    <service id=".service_locator.PhJR_UQ" class="Symfony\Component\DependencyInjection\ServiceLocator">
       <tag name="container.service_locator"/>
       <argument type="collection">
+        <argument key="App\Controller\DataController::deleteGenealogyById" type="service_closure" id=".service_locator.n.m5dth"/>
+        <argument key="App\Controller\DataController::getAllGenealogies" type="service_closure" id=".service_locator.n.m5dth"/>
+        <argument key="App\Controller\DataController::getGenealogyById" type="service_closure" id=".service_locator.n.m5dth"/>
+        <argument key="App\Controller\DataController::renameGenealogyById" type="service_closure" id=".service_locator.n.m5dth"/>
+        <argument key="App\Controller\Files\ImportGedcomFileController::importGedcomFile" type="service_closure" id=".service_locator.2UVx68m"/>
         <argument key="App\Controller\RegistrationController::register" type="service_closure" id=".service_locator.URv18j3"/>
         <argument key="App\Controller\RegistrationController::verifyUserEmail" type="service_closure" id=".service_locator.kPUOGb8"/>
         <argument key="App\Controller\ResetPasswordController::request" type="service_closure" id=".service_locator.EE0.cm9"/>
@@ -7898,6 +7968,11 @@
         <argument key="App\Kernel::registerContainerConfiguration" type="service_closure" id=".service_locator.y4_Zrx."/>
         <argument key="kernel::loadRoutes" type="service_closure" id=".service_locator.y4_Zrx."/>
         <argument key="kernel::registerContainerConfiguration" type="service_closure" id=".service_locator.y4_Zrx."/>
+        <argument key="App\Controller\DataController:deleteGenealogyById" type="service_closure" id=".service_locator.n.m5dth"/>
+        <argument key="App\Controller\DataController:getAllGenealogies" type="service_closure" id=".service_locator.n.m5dth"/>
+        <argument key="App\Controller\DataController:getGenealogyById" type="service_closure" id=".service_locator.n.m5dth"/>
+        <argument key="App\Controller\DataController:renameGenealogyById" type="service_closure" id=".service_locator.n.m5dth"/>
+        <argument key="App\Controller\Files\ImportGedcomFileController:importGedcomFile" type="service_closure" id=".service_locator.2UVx68m"/>
         <argument key="App\Controller\RegistrationController:register" type="service_closure" id=".service_locator.URv18j3"/>
         <argument key="App\Controller\RegistrationController:verifyUserEmail" type="service_closure" id=".service_locator.kPUOGb8"/>
         <argument key="App\Controller\ResetPasswordController:request" type="service_closure" id=".service_locator.EE0.cm9"/>
@@ -8190,10 +8265,20 @@
         <argument key="doctrine.orm.messenger.doctrine_schema_listener" type="service_closure" id="doctrine.orm.messenger.doctrine_schema_listener"/>
       </argument>
     </service>
-    <service id=".service_locator.N41nchi" class="Symfony\Component\DependencyInjection\ServiceLocator">
+    <service id=".service_locator.4OG3fHu" class="Symfony\Component\DependencyInjection\ServiceLocator">
       <tag name="container.service_locator"/>
       <argument type="collection">
+        <argument key="App\Repository\ComponentLevelDataTypes\EventDetailRepository" type="service_closure" id="App\Repository\ComponentLevelDataTypes\EventDetailRepository"/>
+        <argument key="App\Repository\ComponentLevelDataTypes\IndividualEventDetailRepository" type="service_closure" id="App\Repository\ComponentLevelDataTypes\IndividualEventDetailRepository"/>
+        <argument key="App\Repository\ComponentLevelDataTypes\IndividualEventsRepository" type="service_closure" id="App\Repository\ComponentLevelDataTypes\IndividualEventsRepository"/>
+        <argument key="App\Repository\ComponentLevelDataTypes\NamePieceRepository" type="service_closure" id="App\Repository\ComponentLevelDataTypes\NamePieceRepository"/>
+        <argument key="App\Repository\ComponentLevelDataTypes\NameRepository" type="service_closure" id="App\Repository\ComponentLevelDataTypes\NameRepository"/>
+        <argument key="App\Repository\ComponentLevelDataTypes\PlaceRepository" type="service_closure" id="App\Repository\ComponentLevelDataTypes\PlaceRepository"/>
+        <argument key="App\Repository\GedcomRepository" type="service_closure" id="App\Repository\GedcomRepository"/>
         <argument key="App\Repository\ResetPasswordRequestRepository" type="service_closure" id="App\Repository\ResetPasswordRequestRepository"/>
+        <argument key="App\Repository\TopLevelDataTypes\FamilyRepository" type="service_closure" id="App\Repository\TopLevelDataTypes\FamilyRepository"/>
+        <argument key="App\Repository\TopLevelDataTypes\HeaderRepository" type="service_closure" id="App\Repository\TopLevelDataTypes\HeaderRepository"/>
+        <argument key="App\Repository\TopLevelDataTypes\IndividualRepository" type="service_closure" id="App\Repository\TopLevelDataTypes\IndividualRepository"/>
         <argument key="App\Repository\UserRepository" type="service_closure" id="App\Repository\UserRepository"/>
       </argument>
     </service>
@@ -8562,6 +8647,18 @@
         <argument key="web_link.http_header_serializer" type="service_closure" id="web_link.http_header_serializer" on-invalid="ignore"/>
       </argument>
     </service>
+    <service id=".service_locator.jUv.zyj.App\Controller\DataController" class="Symfony\Component\DependencyInjection\ServiceLocator">
+      <tag name="container.service_locator_context" id="App\Controller\DataController"/>
+      <argument>App\Controller\DataController</argument>
+      <argument type="service" id="service_container"/>
+      <factory service=".service_locator.jUv.zyj" method="withContext"/>
+    </service>
+    <service id=".service_locator.jUv.zyj.App\Controller\Files\ImportGedcomFileController" class="Symfony\Component\DependencyInjection\ServiceLocator">
+      <tag name="container.service_locator_context" id="App\Controller\Files\ImportGedcomFileController"/>
+      <argument>App\Controller\Files\ImportGedcomFileController</argument>
+      <argument type="service" id="service_container"/>
+      <factory service=".service_locator.jUv.zyj" method="withContext"/>
+    </service>
     <service id=".service_locator.jUv.zyj.App\Controller\RegistrationController" class="Symfony\Component\DependencyInjection\ServiceLocator">
       <tag name="container.service_locator_context" id="App\Controller\RegistrationController"/>
       <argument>App\Controller\RegistrationController</argument>
@@ -8748,6 +8845,8 @@
       <call method="allowControllers">
         <argument type="collection">
           <argument>App\Kernel</argument>
+          <argument>App\Controller\DataController</argument>
+          <argument>App\Controller\Files\ImportGedcomFileController</argument>
           <argument>App\Controller\RegistrationController</argument>
           <argument>App\Controller\ResetPasswordController</argument>
           <argument>Doctrine\Bundle\DoctrineBundle\Controller\ProfilerController</argument>
@@ -8947,6 +9046,9 @@
     <service id="debug.security.event_dispatcher.api.inner" class="Symfony\Component\EventDispatcher\EventDispatcher"/>
     <service id=".errored..service_locator.y4_Zrx..Symfony\Component\Config\Loader\LoaderInterface" class="Symfony\Component\Config\Loader\LoaderInterface">
       <tag name="container.error" message="Cannot autowire service &quot;.service_locator.y4_Zrx.&quot;: it needs an instance of &quot;Symfony\Component\Config\Loader\LoaderInterface&quot; but this type has been excluded from autowiring."/>
+    </service>
+    <service id=".errored..service_locator.URv18j3.App\Entity\User" class="App\Entity\User">
+      <tag name="container.error" message="Cannot autowire service &quot;.service_locator.URv18j3&quot;: it needs an instance of &quot;App\Entity\User&quot; but this type has been excluded in &quot;config/services.yaml&quot;."/>
     </service>
     <service id=".console.command.about.lazy" class="Symfony\Component\Console\Command\LazyCommand">
       <argument>about</argument>
@@ -10140,13 +10242,11 @@
     <service id="Symfony\Component\Security\Core\User\UserCheckerInterface" alias="security.user_checker"/>
     <service id="logger" alias="monolog.logger"/>
     <service id="Psr\Log\LoggerInterface" alias="monolog.logger"/>
-    <service id="Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenInterface" alias="lexik_jwt_authentication.jwt_manager"/>
     <service id="Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface" alias="lexik_jwt_authentication.jwt_manager"/>
     <service id="Lexik\Bundle\JWTAuthenticationBundle\Services\JWSProvider\JWSProviderInterface" alias="lexik_jwt_authentication.jws_provider.lcobucci"/>
     <service id="Lexik\Bundle\JWTAuthenticationBundle\Security\Http\Authentication\AuthenticationSuccessHandler" alias="lexik_jwt_authentication.handler.authentication_success"/>
     <service id="Lexik\Bundle\JWTAuthenticationBundle\Security\Http\Authentication\AuthenticationFailureHandler" alias="lexik_jwt_authentication.handler.authentication_failure"/>
     <service id="Lexik\Bundle\JWTAuthenticationBundle\TokenExtractor\TokenExtractorInterface" alias="lexik_jwt_authentication.extractor.chain_extractor"/>
-    <service id="lexik_jwt_authentication.jwt_token_authenticator" alias="lexik_jwt_authentication.security.guard.jwt_token_authenticator"/>
     <service id="lexik_jwt_authentication.encoder" alias="lexik_jwt_authentication.encoder.lcobucci" public="true"/>
     <service id="Lexik\Bundle\JWTAuthenticationBundle\Encoder\JWTEncoderInterface" alias="lexik_jwt_authentication.encoder.lcobucci"/>
     <service id="lexik_jwt_authentication.key_loader" alias="lexik_jwt_authentication.key_loader.raw" public="true"/>
@@ -10154,7 +10254,7 @@
     <service id="SymfonyCasts\Bundle\VerifyEmail\VerifyEmailHelperInterface" alias="symfonycasts.verify_email.helper"/>
     <service id="container.env_var_processors_locator" alias=".service_locator.bJ.4HC5" public="true"/>
     <service id="twig.loader.filesystem" alias="twig.loader.native_filesystem"/>
-    <service id="argument_resolver.controller_locator" alias=".service_locator.L076gq0"/>
+    <service id="argument_resolver.controller_locator" alias=".service_locator.PhJR_UQ"/>
     <service id="doctrine.id_generator_locator" alias=".service_locator.KLVvNIq"/>
     <service id="twig.loader" alias="twig.loader.native_filesystem"/>
     <service id="Psr\Log\LoggerInterface $requestLogger" alias="monolog.logger.request"/>
@@ -10198,7 +10298,9 @@
     <service id="security.event_dispatcher.login" alias="debug.security.event_dispatcher.login"/>
     <service id="security.event_dispatcher.api" alias="debug.security.event_dispatcher.api"/>
     <service id=".service_locator.gFlme_s" alias=".service_locator.y4_Zrx."/>
-    <service id=".service_locator.PvY5jbk" alias=".service_locator.URv18j3"/>
+    <service id=".service_locator.xSdNvgP" alias=".service_locator.n.m5dth"/>
+    <service id=".service_locator.CvAJ1kL" alias=".service_locator.2UVx68m"/>
+    <service id=".service_locator.GdPrAYu" alias=".service_locator.URv18j3"/>
     <service id=".service_locator.025Wi8b" alias=".service_locator.kPUOGb8"/>
     <service id=".service_locator.ostNlSn" alias=".service_locator.EE0.cm9"/>
     <service id=".service_locator.W47vLMj" alias=".service_locator.Mhqdd2r"/>

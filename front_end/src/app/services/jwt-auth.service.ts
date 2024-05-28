@@ -60,4 +60,8 @@ export class JwtAuthService {
       })
   }
 
+  import (file: String, genealogyName: String) {
+    return this.http.post(environment.apiURL + '/files/import', {'file': file, 'genealogyName': name}, {headers})
+   }
+
 }

@@ -1,1 +1,6 @@
-<p>genealogy works!</p>
+<ng-container *ngIf="isManageGenealogies; else showGenealogy">
+    <app-genealogy-manage [genealogy]="genealogyToShow"></app-genealogy-manage>
+</ng-container>
+<ng-template #showGenealogy>
+    <app-genealogy-view [genealogy]="genealogyToShow"></app-genealogy-view>
+</ng-template>

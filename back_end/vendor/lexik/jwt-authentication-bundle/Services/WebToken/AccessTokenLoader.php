@@ -17,15 +17,10 @@ use Lexik\Bundle\JWTAuthenticationBundle\Exception\JWTDecodeFailureException;
 final class AccessTokenLoader
 {
     private $jwsLoader;
-
     private $jwsHeaderCheckerManager;
-
     private $claimCheckerManager;
-
     private $jweLoader;
-
     private $signatureKeyset;
-
     private $encryptionKeyset;
 
     /**

@@ -1,1 +1,12 @@
-<p>genealogy-view works!</p>
+<div class="container-snipet snipet-responsive">
+    <div class="snipet">
+        <h1 *ngIf="genealogy != undefined"> {{ genealogy.name }}</h1>
+        <p class="form-label mb-3">Choose the presentation type for your genealogy:</p>
+        <div class="mb-5">
+            <button type="submit" class="btn btn-primary half-btn" disabled>Lists</button>
+            <button type="submit" class="btn btn-primary half-btn tmp">Details</button>
+            <button type="submit" class="btn btn-primary half-btn tmp">Tree</button>
+        </div>
+        <app-genealogy-lists></app-genealogy-lists>
+    </div>    
+</div>

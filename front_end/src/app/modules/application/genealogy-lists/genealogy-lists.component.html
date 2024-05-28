@@ -1,1 +1,93 @@
-<p>genealogy-lists works!</p>
+<div>
+    <button (click)="isIndividualList = true; isGenerationList = false; isFamilyList = false; isPlaceList = false" 
+        type="submit" class="btn btn-primary third-btn" [attr.disabled]="isIndividualList? true : null">Individuals</button>
+    <button (click)="isIndividualList = false; isGenerationList = true; isFamilyList = false; isPlaceList = false" 
+        type="submit" class="btn btn-primary third-btn" [attr.disabled]="isGenerationList? true : null">Generations</button>
+    <button (click)="isFamilyList = true; isGenerationList = false; isIndividualList = false; isPlaceList = false" 
+        type="submit" class="btn btn-primary third-btn" [attr.disabled]="isFamilyList? true : null">Families</button>
+    <button (click)="isPlaceList = true; isGenerationList = false; isIndividualList = false; isFamilyList = false" 
+        type="submit" class="btn btn-primary third-btn" [attr.disabled]="isPlaceList? true : null">Places</button>
+</div>
+
+<div *ngIf="isIndividualList == true" class="genealogy-list mt-4">
+    <div class="row">
+        <div class="col-md-1 genealogy-list-title">#</div>
+        <div class="col-md-4 genealogy-list-title">First name</div>
+        <div class="col-md-3 genealogy-list-title">Last name</div>
+        <div class="col-md-2 genealogy-list-title">Sex</div>
+        <div class="col-md-2 genealogy-list-title">Dates</div>
+    </div>
+    <div *ngFor="let individual of individuals; let id = index">
+        <div [ngClass]="individual.sex === 'M' ? 'row stripped' : 'row stripped female'">
+            <div class="col-md-1 genealogy-list-value">{{id}}</div>
+            <div class="col-md-4 genealogy-list-value">{{individual.firstName}}</div>
+            <div class="col-md-3 genealogy-list-value">{{individual.lastName | uppercase }}</div>
+            <div class="col-md-2 genealogy-list-value">{{individual.sex}}</div>
+            <div class="col-md-2 genealogy-list-value">({{individual.birthDate}}-{{individual.deathDate}})</div>
+        </div> 
+    </div>   
+</div>
+
+<div *ngIf="isGenerationList == true" class="genealogy-list mt-4">
+    <div class="row">
+        <div class="col-md-4 genealogy-list-title">First name</div>
+        <div class="col-md-3 genealogy-list-title">Last name</div>
+        <div class="col-md-2 genealogy-list-title">Sex</div>
+        <div class="col-md-3 genealogy-list-title">Dates</div>
+    </div>
+    <div *ngFor="let generation of generations; let id = index">
+        <div class="row">
+            <div class="col genealogy-list-subtitle">Generation {{generation.generation}}</div>
+        </div>
+        <div *ngFor="let individual of generation.individuals">
+            
+            <div [ngClass]="individual.sex === 'M' ? 'row stripped' : 'row stripped female'">
+                <div class="col-md-4 genealogy-list-value">{{individual.firstName}}</div>
+                <div class="col-md-3 genealogy-list-value">{{individual.lastName | uppercase }}</div>
+                <div class="col-md-2 genealogy-list-value">{{individual.sex}}</div>
+                <div class="col-md-3 genealogy-list-value">({{individual.birthDate}}-{{individual.deathDate}})</div>
+            </div> 
+        </div>
+    </div>   
+</div>
+
+<div *ngIf="isFamilyList == true" class="genealogy-list mt-4">
+    <div class="row">
+        <div class="col-md-1 genealogy-list-title">Id</div>
+        <div class="col-md-4 genealogy-list-title">Husband</div>
+        <div class="col-md-4 genealogy-list-title">Wife</div>
+        <div class="col-md-3 genealogy-list-title">Child(s)</div>
+    </div>
+    <div *ngFor="let family of families; let id = index">
+        <div class="row stripped">
+            <div class="col-md-1 genealogy-list-value">{{family.id}}</div>
+            <div class="col-md-4 genealogy-list-value">{{family.husband}}</div>
+            <div class="col-md-4 female genealogy-list-value">{{family.wife}}</div>
+            <div [ngClass]="family.childs[0].sex === 'M' ? 'col-md-3 genealogy-list-value' : 'col-md-3 female genealogy-list-value'">
+                <span *ngFor="let child of family.childs; let id = index">
+                    <span *ngIf="id == 0; else elseBlock">{{id+1}} - {{child.firstName}} {{child.lastName | uppercase}}</span>
+                    <ng-template #elseBlock>
+                        <span><br>{{id+1}} - {{child.firstName}} {{child.lastName | uppercase}}</span>
+                    </ng-template>
+                </span>
+            </div>
+        </div> 
+    </div>   
+</div>
+
+<div *ngIf="isPlaceList == true" class="genealogy-list mt-4">
+    <div class="row">
+        <div class="col-md-1 genealogy-list-title">#</div>
+        <div class="col-md-6 genealogy-list-title">Name</div>
+        <div class="col-md-2 genealogy-list-title">Lattitude</div>
+        <div class="col-md-3 genealogy-list-title">Longitude</div>
+    </div>
+    <div *ngFor="let place of places; let id = index">
+        <div class="row stripped">
+            <div class="col-md-1 genealogy-list-value">{{id}}</div>
+            <div class="col-md-6 genealogy-list-value">{{place.name | uppercase}}</div>
+            <div class="col-md-2 genealogy-list-value">{{place.lattitude}}</div>
+            <div class="col-md-3 genealogy-list-value">{{place.longitude}}</div>
+        </div> 
+    </div>   
+</div>

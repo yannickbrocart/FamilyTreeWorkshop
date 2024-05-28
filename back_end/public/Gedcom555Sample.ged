@@ -1,0 +1,153 @@
+﻿0 HEAD
+1 GEDC
+2 VERS 5.5.5
+2 FORM LINEAGE-LINKED
+3 VERS 5.5.5
+1 CHAR UTF-8
+1 DEST All users
+1 SOUR yannickbrocart.com
+2 NAME GEDCOM Specification
+2 VERS 5.5.5
+2 CORP Yannick Brocart
+2 DATA www.yannickbrocart.com data
+3 DATE 5 Dec 2023
+4 TIME 17:58:41
+3 COPR © 2023 Yannick Brocart
+1 DATE 5 Dec 1971
+2 TIME 09:20:17
+1 FILE Gedcom555Sample.ged
+1 COPR © 2023 Yannick Brocart
+1 LANG English
+1 NOTE The GEDCOM 5.5.5 Specification Sample GEDCOM File (UTF-8).
+0 @I1@ INDI
+1 NAME Yannick/BROCART/
+2 TYPE birth
+2 GIVN BROCART
+2 SURN Yannick
+1 SEX M
+1 BIRT
+2 DATE 15 AUG 1971
+3 TIME 4:00
+2 PLAC Montluçon,03100,Allier,Auvergne,FRANCE
+1 FAMC @F1@
+0 @I2@ INDI
+1 NAME Pierre-Alain Marie Marcel/BROCART/
+2 TYPE birth
+2 GIVN BROCART
+2 SURN Pierre-Alain Marie Marcel
+1 SEX M
+1 BIRT
+2 DATE 20 May 1945
+3 TIME 21:30
+2 PLAC Montluçon,03100,Allier,Auvergne,FRANCE
+1 FAMC @F2@
+1 FAMS @F1@
+0 @I3@ INDI
+1 NAME Jacqueline Jeanne Antoinette Catherine/LIEUDENOT/
+2 TYPE birth
+2 GIVN LIEUDENOT
+2 SURN Jacqueline Jeanne Antoinette Catherine
+1 SEX F
+1 BIRT
+2 DATE 04 Oct 1947
+3 TIME 4:30
+2 PLAC Montluçon,03100,Allier,Auvergne,FRANCE
+1 FAMC @F3@
+1 FAMS @F1@
+0 @I4@ INDI
+1 NAME Marius Paul Raymond/BROCART/
+2 TYPE birth
+2 GIVN BROCART
+2 SURN Marius Paul Raymond
+1 SEX M
+1 BIRT
+2 DATE 7 OCT 1920
+3 TIME 22:00
+2 PLAC Nice,06000,Alpes-Maritimes,Provence-Alpes-Côte D'Azur,FRANCE
+1 DEAT
+2 DATE 15 MAR 1998
+3 TIME 2:45
+2 PLAC Désertines,03630,Allier,Auvergne,FRANCE
+1 FAMC @F4@
+1 FAMS @F2@
+0 @I5@ INDI
+1 NAME Jeanne Geneviève Odette/CELLIÈRE/
+2 TYPE birth
+2 GIVN CELLIÈRE
+2 SURN Jeanne Geneviève Odette
+1 SEX F
+1 BIRT
+2 DATE 19 OCT 1919
+3 TIME 14:00
+2 PLAC Montluçon,03100,Allier,Auvergne,FRANCE
+1 FAMC @F5@
+1 FAMS @F2@
+0 @I6@ INDI
+1 NAME Louis Aimé René/LIEUDENOT/
+2 TYPE birth
+2 GIVN LIEUDENOT
+2 SURN Louis Aimé René
+1 SEX M
+1 BIRT
+2 DATE 15 SEP 1920
+3 TIME 6:00
+2 PLAC Paray-Le-Monial,71600,Saône-Et-Loire,Bourgogne,FRANCE
+1 DEAT
+2 DATE 22 AUG 2004
+3 TIME 1:00
+2 PLAC Désertines,03630,Allier,Auvergne,FRANCE
+1 FAMC @F6@
+1 FAMS @F3@
+0 @I7@ INDI
+1 NAME Marie Yvonne/BRAVY/
+2 TYPE birth
+2 GIVN BRAVY
+2 SURN Marie Yvonne
+1 SEX F
+1 BIRT
+2 DATE 15 MAR 1920
+3 TIME 3:00
+2 PLAC Saint-Amand-Montrond,18200,Cher,Centre,FRANCE
+1 DEAT
+2 DATE 1 MAR 2006
+3 TIME 6:30
+2 PLAC Désertines,03630,Allier,Auvergne,FRANCE
+1 FAMC @F7@
+1 FAMS @F3@
+0 @I8@ INDI
+1 NAME Michèle, Françoise, Marguerite/LIEUDENOT/
+2 TYPE birth
+2 GIVN LIEUDENOT
+2 SURN Michèle
+1 SEX F
+1 BIRT
+2 DATE 22 NOV 1948
+3 TIME 4:30
+2 PLAC Montluçon,03100,Allier,Auvergne,FRANCE
+1 FAMC @F3@
+0 @I9@ INDI
+1 NAME Danièle, Nicole/NURET/
+2 TYPE User defined
+2 GIVN NURET
+2 SURN Danièle
+1 SEX F
+1 BIRT
+2 DATE 7 OCT 1941
+3 TIME 4:30
+2 PLAC Montluçon,03100,Allier,Auvergne,FRANCE
+1 FAMC @F3@
+0 @F1@ FAM
+1 HUSB @I2@
+1 WIFE @I3@
+1 CHIL @I1@
+0 @F2@ FAM
+1 HUSB @I4@
+1 WIFE @I5@
+1 CHIL @I2@
+0 @F3@ FAM
+1 HUSB @I6@
+1 WIFE @I7@
+1 CHIL @I3@
+1 CHIL @I8@
+1 CHIL @I9@
+0 TRLR

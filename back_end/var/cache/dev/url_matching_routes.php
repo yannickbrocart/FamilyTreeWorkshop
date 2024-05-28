@@ -14,6 +14,8 @@ return [
         '/_profiler/phpinfo' => [[['_route' => '_profiler_phpinfo', '_controller' => 'web_profiler.controller.profiler::phpinfoAction'], null, null, null, false, false, null]],
         '/_profiler/xdebug' => [[['_route' => '_profiler_xdebug', '_controller' => 'web_profiler.controller.profiler::xdebugAction'], null, null, null, false, false, null]],
         '/_profiler/open' => [[['_route' => '_profiler_open_file', '_controller' => 'web_profiler.controller.profiler::openAction'], null, null, null, false, false, null]],
+        '/genealogy/manage/getall' => [[['_route' => 'app_genealogy_manage_get_all', '_controller' => 'App\\Controller\\DataController::getAllGenealogies'], null, null, null, false, false, null]],
+        '/files/import' => [[['_route' => 'app_import_gedcom_file', '_controller' => 'App\\Controller\\Files\\ImportGedcomFileController::importGedcomFile'], null, null, null, false, false, null]],
         '/register' => [[['_route' => 'app_register', '_controller' => 'App\\Controller\\RegistrationController::register'], null, null, null, false, false, null]],
         '/register/verifyemail' => [[['_route' => 'app_register_verify_email', '_controller' => 'App\\Controller\\RegistrationController::verifyUserEmail'], null, null, null, false, false, null]],
         '/reset-password' => [[['_route' => 'app_forgot_password_request', '_controller' => 'App\\Controller\\ResetPasswordController::request'], null, null, null, false, false, null]],
@@ -41,6 +43,11 @@ return [
                         .')'
                     .')'
                 .')'
+                .'|/genealogy/manage/(?'
+                    .'|getbyid/([^/]++)(*:239)'
+                    .'|renamebyid/([^/]++)(*:266)'
+                    .'|deletebyid/([^/]++)(*:293)'
+                .')'
             .')/?$}sDu',
     ],
     [ // $dynamicRoutes
@@ -51,8 +58,11 @@ return [
         148 => [[['_route' => '_profiler_router', '_controller' => 'web_profiler.controller.router::panelAction'], ['token'], null, null, false, false, null]],
         168 => [[['_route' => '_profiler_exception', '_controller' => 'web_profiler.controller.exception_panel::body'], ['token'], null, null, false, false, null]],
         181 => [[['_route' => '_profiler_exception_css', '_controller' => 'web_profiler.controller.exception_panel::stylesheet'], ['token'], null, null, false, false, null]],
-        191 => [
-            [['_route' => '_profiler', '_controller' => 'web_profiler.controller.profiler::panelAction'], ['token'], null, null, false, true, null],
+        191 => [[['_route' => '_profiler', '_controller' => 'web_profiler.controller.profiler::panelAction'], ['token'], null, null, false, true, null]],
+        239 => [[['_route' => 'app_genealogy_manage_get_byid', '_controller' => 'App\\Controller\\DataController::getGenealogyById'], ['id'], null, null, false, true, null]],
+        266 => [[['_route' => 'app_genealogy_manage_rename_byid', '_controller' => 'App\\Controller\\DataController::renameGenealogyById'], ['id'], null, null, false, true, null]],
+        293 => [
+            [['_route' => 'app_genealogy_manage_delete_byid', '_controller' => 'App\\Controller\\DataController::deleteGenealogyById'], ['id'], null, null, false, true, null],
             [null, null, null, null, false, false, 0],
         ],
     ],

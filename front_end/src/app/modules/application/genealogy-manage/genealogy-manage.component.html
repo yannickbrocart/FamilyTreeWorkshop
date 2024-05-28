@@ -1,1 +1,67 @@
-<p>genealogy-manage works!</p>
+<div class="container-snipet snipet-responsive">
+    <div class="snipet">
+        <div class="mb-5">
+            <h1>Manage my genealogies</h1>
+        </div>
+        <div class="genealogy-manage-list mt-4">
+            <div class="row">
+                <div class="col-md-6 genealogy-manage-list-title">Name</div>
+                <div class="col-md-2 genealogy-manage-list-title">Last modified</div>
+                <div class="col genealogy-manage-list-title">View</div>
+                <div class="col genealogy-manage-list-title">Rename</div>
+                <div class="col genealogy-manage-list-title">Delete</div>
+            </div>
+            <div *ngFor="let genealogy of genealogies; let id = index">
+                <div class="row stripped">
+                    <div class="col-md-6 genealogy-manage-list-value">{{ genealogy.name }}</div>
+                    <div class="col-md-2 genealogy-manage-list-value">{{ genealogy.lastModifiedDate | date:'MMM d, y' }}</div>
+                    <div class="col genealogy-manage-list-value">
+                        <button (click)="openGenealogyById(genealogy.id)" type="button" class="btn btn-primary manage-btn">
+                            <i class="fa-solid fa-eye"></i>
+                        </button>
+                    </div>
+                    <div class="col genealogy-manage-list-value">
+                        <button (click)="renameGenealogy(id)" type="button" class="btn btn-primary manage-btn-danger">
+                            <i class="fa-solid fa-pen-to-square"></i>
+                        </button>
+                    </div>
+                    <div class="col genealogy-manage-list-value">
+                        <button (click)="deleteGenealogy(id)" type="button" class="btn btn-primary manage-btn-alert">
+                            <i class="fa-solid fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <form *ngIf="isRenameGenealogy" class="genealogy-manage-rename mt-4 row" [formGroup]='renameGenealogyForm'
+            (ngSubmit)="onSubmitRenameGenealogyForm()">
+            <div id="icon-div" class="col-12 col-lg-9 mb-3">
+                <label for="newName" class="form-label">Enter the new name for <span
+                        class="citation">'{{genealogies[idGenealogy].name}}'</span>:</label>
+                <input type="text" class="form-control form-control-lg" formControlName='newName'>
+                <i class="fa-solid" [ngClass]="{
+                 'fa-xmark': !renameGenealogyForm.controls.newName.valid && renameGenealogyForm.controls.newName.touched,
+                 'fa-check': renameGenealogyForm.controls.newName.valid }"></i>
+                <div id="emailHelp" class="form-text">
+                    Name must be must be between 6-80 characters long.</div>
+            </div>
+            <div class="col-12 col-lg-3 d-grid">
+                <button type="submit" class="btn b<t>n-primary" [disabled]="!renameGenealogyForm.valid">Rename</button>
+            </div>
+        </form>
+
+        <form *ngIf="isDeleteGenealogy" class="genealogy-manage-delete mt-4" [formGroup]='deleteGenealogyForm'
+        (ngSubmit)="onSubmitDeleteGenealogyForm()">
+            <div class="col">
+                <label for="newName" class="form-label">
+                    Are you sure to want delete <span class="citation">'{{genealogies[idGenealogy].name}}'</span>
+                    genealogy?
+                </label>
+            </div>
+            <div class="col-12 col-lg-3 d-grid">
+                <button type="submit" class="btn btn-primary">Yes, delete</button>
+            </div>
+        </form>
+    </div>
+</div>

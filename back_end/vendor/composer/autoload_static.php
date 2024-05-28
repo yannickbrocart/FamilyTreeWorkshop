@@ -146,7 +146,6 @@ class ComposerStaticInit2e074b178cf99c894ccdda33ec3f7bde
         'N' => 
         array (
             'Nelmio\\CorsBundle\\' => 18,
-            'Namshi\\JOSE\\' => 12,
         ),
         'M' => 
         array (
@@ -562,10 +561,6 @@ class ComposerStaticInit2e074b178cf99c894ccdda33ec3f7bde
         'Nelmio\\CorsBundle\\' => 
         array (
             0 => __DIR__ . '/..' . '/nelmio/cors-bundle',
-        ),
-        'Namshi\\JOSE\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/namshi/jose/src/Namshi/JOSE',
         ),
         'Monolog\\' => 
         array (

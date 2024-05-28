@@ -1,1 +1,111 @@
-<p>import works!</p>
+<div class="container-snipet snipet-responsive">
+    <div class="snipet">
+        <h1>Import</h1>
+        <p class="form-label mb-3">Choose the Gedcom file with only .ged extension</p>
+        <!-- <app-import> -->
+        <form [formGroup]='importForm' (ngSubmit)="onSubmitImportForm()">
+            <div *ngIf="showError" class="alert alert-danger mb-0" role="alert">
+                <div class="d-flex align-items-center mb-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="bi bi-exclamation-triangle-fill flex-shrink-0 me-2" viewBox="0 0 16 16" role="img" aria-label="Warning:">
+                        <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>                </svg>
+                    <span class="alert-heading">Warning!</span>
+                </div>
+                You're file is inreadable.<br> Try again with valid Gedcom file.
+            </div>
+            
+            <div id="icon-div" class="mb-3">
+                <label for="file" class="form-label">Gedcom file</label>
+                <input (change)="handleFileInputChange($event)" type="file" class="form-control form-control-lg" formControlName='file'>
+                <i class="fa-solid icon-row" [ngClass]="{
+                    'fa-xmark': !importForm.controls.file.valid && !importForm.controls.file.pristine,
+                    'fa-check': importForm.controls.file.valid }"></i>
+            </div>
+            <div class="file-information mb-4" [hidden]="!importForm.controls.file.valid">
+                <div class="row">
+                    <div class="col col-md-3 file-information-category">File name</div>
+                    <div class="col-md-9 file-information-value">{{ fileName }}</div>
+                </div>
+                <div class="row">
+                    <div class="col col-md-3 file-information-category">Last modified</div>
+                    <div class="col-md-9 file-information-value">{{ lastModified }}</div>
+                </div>
+                <div class="row">
+                    <div class="col col-md-3 file-information-category">Size</div>
+                    <div class="col-md-9 file-information-value">{{ size }}</div>
+                </div>
+                <div class="row" *ngIf="gedcomFileInformation.gedcomVersion">
+                    <div class="col col-md-3 file-information-category">Version</div>
+                    <div class="col-md-9 file-information-value">{{ gedcomFileInformation.gedcomVersion }}</div>
+                </div>
+                <div class="row" *ngIf="gedcomFileInformation.gedcomForm">
+                    <div class="col col-md-3 file-information-category">Form</div>
+                    <div class="col-md-9 file-information-value">{{ gedcomFileInformation.gedcomForm }}</div>
+                </div>
+                <div class="row" *ngIf="gedcomFileInformation.gedcomCharacterSet">
+                    <div class="col col-md-3 file-information-category">Character set</div>
+                    <div class="col-md-9 file-information-value">{{ gedcomFileInformation.gedcomCharacterSet }}</div>
+                </div>
+                <div class="row" *ngIf="gedcomFileInformation.gedcomDestination">
+                    <div class="col col-md-3 file-information-category">Destination</div>
+                    <div class="col-md-9 file-information-value">{{ gedcomFileInformation.gedcomDestination }}</div>
+                </div>
+                <div class="row" *ngIf="gedcomFileInformation.gedcomSource">
+                    <div class="col col-md-3 file-information-category">Source</div>
+                    <div class="col-md-9 file-information-value">{{ gedcomFileInformation.gedcomSource }}</div>
+                </div>
+                <div class="row" *ngIf="gedcomFileInformation.gedcomSourceName">
+                    <div class="col col-md-3 file-information-category">&bull; name</div>
+                    <div class="col-md-9 file-information-value">{{ gedcomFileInformation.gedcomSourceName }}</div>
+                </div>
+                <div class="row" *ngIf="gedcomFileInformation.gedcomSourceCorporation">
+                    <div class="col col-md-3 file-information-category">&bull; corporation</div>
+                    <div class="col-md-9 file-information-value">{{ gedcomFileInformation.gedcomSourceCorporation }}</div>
+                </div>
+                <div class="row" *ngIf="gedcomFileInformation.gedcomSourceData">
+                    <div class="col col-md-3 file-information-category">&bull; data</div>
+                    <div class="col-md-9 file-information-value">{{ gedcomFileInformation.gedcomSourceData }}</div>
+                </div>
+                <div class="row" *ngIf="gedcomFileInformation.gedcomSourceDataDate">
+                    <div class="col file-information-category">&bull; data date</div>
+                    <div class="col-md-9 file-information-value">{{ gedcomFileInformation.gedcomSourceDataDate }} at {{
+                        gedcomFileInformation.gedcomSourceDataTime}}</div>
+                </div>
+                <div class="row" *ngIf="gedcomFileInformation.gedcomSourceCopyright">
+                    <div class="col col-md-3 file-information-category">&bull; copyright</div>
+                    <div class="col-md-9 file-information-value">{{ gedcomFileInformation.gedcomSourceCopyright }}</div>
+                </div>
+                <div class="row" *ngIf="gedcomFileInformation.gedcomDate">
+                    <div class="col col-md-3 file-information-category">&bull; date</div>
+                    <div class="col-md-9 file-information-value">{{ gedcomFileInformation.gedcomDate }} at {{ gedcomFileInformation.gedcomTime}}</div>
+                </div>
+                <div class="row" *ngIf="gedcomFileInformation.gedcomFile">
+                    <div class="col col-md-3 file-information-category">File</div>
+                    <div class="col-md-9 file-information-value">{{ gedcomFileInformation.gedcomFile }}</div>
+                </div>
+                <div class="row" *ngIf="gedcomFileInformation.gedcomCopyright ">
+                    <div class="col col-md-3 file-information-category">Copyright</div>
+                    <div class="col-md-9 file-information-value">{{ gedcomFileInformation.gedcomCopyright }}</div>
+                </div>
+                <div class="row" *ngIf="gedcomFileInformation.gedcomLanguage">
+                    <div class="col col-md-3 file-information-category">Language</div>
+                    <div class="col-md-9 file-information-value">{{ gedcomFileInformation.gedcomLanguage }}</div>
+                </div>
+                <div class="row" *ngIf="gedcomFileInformation.gedcomNote">
+                    <div class="col col-md-3 file-information-category">Note(s)</div>
+                    <div class="col-md-9 file-information-value">{{ gedcomFileInformation.gedcomNote }}</div>
+                </div>
+            </div>
+            <div id="icon-div" class="mb-3" *ngIf="importForm.controls.file.valid">
+                <label for="file" class="form-label">Import genalogy as</label>
+                <input type="text" class="form-control form-control-lg" formControlName='genealogyName'>
+                <i class="fa-solid icon-row" [ngClass]="{
+                    'fa-xmark': !importForm.controls.genealogyName.valid && !importForm.controls.genealogyName.pristine,
+                    'fa-check': importForm.controls.genealogyName.valid }"></i>
+            </div>
+            <div class="d-grid gap-2 col-12 col-lg-6 align-items-end">
+                <button type="submit" class="btn btn-primary" [disabled]="!importForm.valid">Import</button>
+            </div>
+        </form>
+        <!-- </app-import> -->
+    </div>
+</div>
