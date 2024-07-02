@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild, Output } from '@angular/core';
 import { DataService } from 'src/app/services/data.service';
+
 
 export type Genealogy = {
   id: number; 
@@ -13,6 +14,7 @@ export type Genealogy = {
   styleUrls: ['./genealogy.component.css']
 })
 export class GenealogyComponent{
+  @Output() genealogyOpened: any  | undefined;
   isShowIndividual: boolean = true;
   isManageGenealogies: boolean = true;
   genealogyToShow: Genealogy = {

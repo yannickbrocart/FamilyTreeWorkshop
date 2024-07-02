@@ -2,11 +2,11 @@
 
 namespace App\Entity\TopLevelDataTypes;
 
-use App\Entity\Gedcom;
 use App\Repository\TopLevelDataTypes\FamilyRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use app\Entity\TopLevelDataTypes\Individual;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 
@@ -19,29 +19,24 @@ class Family
     #[Groups(['model_to_json'])]
     private ?int $id = null;
 
-    #[ORM\ManyToOne(targetEntity: Individual::class, inversedBy: 'spouseToFamily', cascade: ['persist'])]
+    #[ORM\ManyToOne(inversedBy: 'spouseToFamily1')]
     #[Groups(['families_to_json'])]
     private ?Individual $person1 = null;
-    
-    #[ORM\ManyToOne(targetEntity: Individual::class, inversedBy: 'spouseToFamily', cascade: ['persist'])]
+
+    #[ORM\ManyToOne(inversedBy: 'spouseToFamily')]
     #[Groups(['families_to_json'])]
     private ?Individual $person2 = null;
 
-    #[ORM\OneToMany(targetEntity: Individual::class, mappedBy: 'childToFamily', cascade: ['persist'])]
+    #[ORM\OneToMany(targetEntity: Individual::class, mappedBy: 'childToFamily')]
     #[Groups(['families_to_json'])]
     private Collection $childs;
-
-    #[ORM\ManyToOne(targetEntity: Individual::class, inversedBy: 'families', cascade: ['persist'])]
-    #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['families_to_json'])]
-    private ?Gedcom $gedcom = null;
-
 
     public function __construct()
     {
         $this->childs = new ArrayCollection();
     }
 
+    
     public function setId(int $id): static
     {
         $this->id = $id;
@@ -65,7 +60,7 @@ class Family
 
         return $this;
     }
-    
+
     public function getPerson2(): ?Individual
     {
         return $this->person2;
@@ -104,18 +99,6 @@ class Family
                 $child->setChildToFamily(null);
             }
         }
-
-        return $this;
-    }
-
-    public function getGedcom(): ?Gedcom
-    {
-        return $this->gedcom;
-    }
-
-    public function setGedcom(?Gedcom $gedcom): static
-    {
-        $this->gedcom = $gedcom;
 
         return $this;
     }

@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -44,6 +46,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column]
     private ?bool $isVerified = false;
+
+    /**
+     * @var Collection<int, Gedcom>
+     */
+    #[ORM\OneToMany(targetEntity: Gedcom::class, mappedBy: 'gedcom')]
+    private Collection $gedcoms;
+
+    public function __construct()
+    {
+        $this->gedcoms = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -172,4 +185,33 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         return $this->isVerified;
     }
+
+    /**
+     * @return Collection<int, Gedcom>
+     */
+    public function getGedcom(): Collection
+    {
+        return $this->gedcoms;
+    }
+
+    public function addName(Gedcom $gedcom): static
+    {
+        if (!$this->gedcoms->contains($gedcom)) {
+            $this->gedcoms->add($gedcom);
+            $gedcom->setUser($this);
+        }
+        return $this;
+    }
+
+    public function removeName(Gedcom $gedcom): static
+    {
+        if ($this->gedcoms->removeElement($gedcom)) {
+            // set the owning side to null (unless already changed)
+            if ($gedcom->getUser() === $this) {
+                $gedcom->setUser(null);
+            }
+        }
+        return $this;
+    }
+
 }

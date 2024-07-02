@@ -6,13 +6,13 @@ use App\Repository\ComponentLevelDataTypes\NamePieceRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
-
 #[ORM\Entity(repositoryClass: NamePieceRepository::class)]
 class NamePiece
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['model_to_json'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 30, nullable: true)]
@@ -39,10 +39,9 @@ class NamePiece
     #[Groups(['model_to_json'])]
     private ?string $suffix = null;
 
-    #[ORM\ManyToOne(targetEntity: Name::class, inversedBy: 'namePieces')]
-    #[Groups(['model_to_json'])]
-    private Name $name;
-
+    #[ORM\ManyToOne(inversedBy: 'NamePieces')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Name $name = null;
 
     public function getId(): ?int
     {
@@ -114,15 +113,16 @@ class NamePiece
         $this->suffix = $suffix;
         return $this;
     }
-    
-    public function getName()
+
+    public function getName(): ?Name
     {
         return $this->name;
     }
 
-    public function setName($name)
+    public function setName(?Name $name): static
     {
         $this->name = $name;
+
         return $this;
     }
 }

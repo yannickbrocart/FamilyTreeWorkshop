@@ -30,6 +30,9 @@ enum KnownTagTypes: string
     case HUSB = 'HUSB';
     case INDI = 'INDI';
     case LANG = 'LANG';
+    case LATI = 'LATI';
+    case LONG = 'LONG';
+    case MAP = 'MAP';
     case NAME = 'NAME';
     case NICK = 'NICK';
     case NOTE = 'NOTE';

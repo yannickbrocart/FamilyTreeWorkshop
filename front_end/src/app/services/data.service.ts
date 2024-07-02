@@ -13,12 +13,18 @@ const headers = new HttpHeaders()
 export class DataService {
 
   private isManageGenealogiesData = new Subject<any>();
+  private genealogyOpenedData = new Subject<any>();
   isManageGenealogies$ = this.isManageGenealogiesData.asObservable();
+  genealogyOpenedData$ = this.genealogyOpenedData.asObservable();
 
   constructor(private http: HttpClient, private router: Router) { }
   
   sendIsManageGenealogies(data: boolean) { 
     this.isManageGenealogiesData.next(data); 
+  }
+
+  sendGenealogyOpened(data: any) { 
+    this.genealogyOpenedData.next(data); 
   }
 
   getGenealogies() {

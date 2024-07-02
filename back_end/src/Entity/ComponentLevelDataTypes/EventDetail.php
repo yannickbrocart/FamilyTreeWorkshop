@@ -36,7 +36,8 @@ class EventDetail
     #[Groups(['model_to_json'])]
     private ?string $cause = null;
 
-    #[ORM\ManyToOne(targetEntity: Place::class, cascade: ['persist'])]
+    #[ORM\ManyToOne(targetEntity: Place::class, cascade: ['persist', 'remove'])]
+    #[Groups(['model_to_json'])]
     private ?Place $place = null;
 
 

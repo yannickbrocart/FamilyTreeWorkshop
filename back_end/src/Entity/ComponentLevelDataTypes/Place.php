@@ -16,12 +16,11 @@ class Place
     private ?int $id = null;
 
     #[ORM\Column(length: 120)]
-    #[Groups(['model_to_json'])]
     private ?string $name = null;
 
     #[ORM\Column(length: 10, nullable: true)]
     #[Groups(['model_to_json'])]
-    private ?string $lattitude = null;
+    private ?string $latitude = null;
 
     #[ORM\Column(length: 11, nullable: true)]
     #[Groups(['model_to_json'])]
@@ -44,14 +43,14 @@ class Place
         return $this;
     }
 
-    public function getLattitude(): ?string
+    public function getLatitude(): ?string
     {
-        return $this->lattitude;
+        return $this->latitude;
     }
 
-    public function setLattitude(?string $lattitude): static
+    public function setLatitude(?string $latitude): static
     {
-        $this->lattitude = $lattitude;
+        $this->latitude = $latitude;
         return $this;
     }
 

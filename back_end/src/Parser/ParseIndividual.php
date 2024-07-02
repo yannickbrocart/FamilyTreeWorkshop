@@ -17,6 +17,7 @@ class ParseIndividual
     public function parse(ParseGedcomToModel $parser)
     {
         $currentIndividual = new Individual();
+        $individualEvents = new IndividualEvents();
         $currentRecord = $parser->explodeCurrentLine();
         $componentDepth = $parser::COMPONENT_LEVEL;
         $parser->idToXRefsArray[$parser->CurrentIndividualId] = $parser->normalizeIdentifier($currentRecord[1]);
@@ -46,16 +47,14 @@ class ParseIndividual
                             }
                     } else switch ($componentTag) {
                         case 'BIRT':                            
-                            if ($currentIndividual->getIndividualEvents()) $individualEvents = $currentIndividual->getIndividualEvents();
-                            else $individualEvents = new IndividualEvents();
                             $individualEventDetail = $this->handleIndividualEventParser($parser, $componentTag);
-                            $currentIndividual->setIndividualEvents($individualEvents->setBirthDetail($individualEventDetail));
+                            $individualEvents->setBirthDetail($individualEventDetail);
+                            $currentIndividual->addIndividualEvent($individualEvents);
                             break;
                         case 'DEAT':
-                            if ($currentIndividual->getIndividualEvents()) $individualEvents = $currentIndividual->getIndividualEvents();
-                            else $individualEvents = new IndividualEvents();
                             $individualEventDetail = $this->handleIndividualEventParser($parser, $componentTag);
-                            $currentIndividual->setIndividualEvents($individualEvents->setDeathDetail($individualEventDetail));
+                            $individualEvents->setDeathDetail($individualEventDetail);
+                            $currentIndividual->addIndividualEvent($individualEvents);
                             break;
                     }                    
                 }

@@ -5,6 +5,7 @@ namespace App\Entity\ComponentLevelDataTypes;
 use App\Repository\ComponentLevelDataTypes\IndividualEventRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
+use App\Entity\TopLevelDataTypes\Individual;
 
 
 #[ORM\Entity(repositoryClass: IndividualEventRepository::class)]
@@ -24,8 +25,11 @@ class IndividualEvents
     private ?IndividualEventDetail $deathDetail = null;
 
     #[ORM\Column(type: 'string')]
+    #[Groups(['model_to_json'])]
     private ?String $death = null;
 
+    #[ORM\ManyToOne(inversedBy: 'names')]
+    private ?Individual $individual = null;
 
     public function getId(): ?int
     {
@@ -62,6 +66,18 @@ class IndividualEvents
     public function setDeathDetail(IndividualEventDetail $deathDetail): static
     {
         $this->deathDetail = $deathDetail;
+        return $this;
+    }
+
+    public function getIndividual(): ?Individual
+    {
+        return $this->individual;
+    }
+
+    public function setIndividual(?Individual $individual): static
+    {
+        $this->individual = $individual;
+
         return $this;
     }
 

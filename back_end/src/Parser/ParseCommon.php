@@ -6,6 +6,7 @@ use App\Entity\ComponentLevelDataTypes\EventDetail;
 use App\Entity\ComponentLevelDataTypes\Place;
 use DateTime;
 use DateTimeZone;
+use SebastianBergmann\Environment\Console;
 
 class ParseCommon
 {
@@ -58,9 +59,39 @@ class ParseCommon
     }
 
 
-    public function handlePlaceParser($parser, $value): Place {
+    public function handlePlaceParser($parser, $value): Place
+    {
         $place = new Place;
         $place->setName($value);
+
+        $parser->getNextLineFromRecord();
+        $currentRecord = $parser->explodeCurrentLine();
+        $componentDepth = (int) $currentRecord[0];
+        $componentTag = trim($currentRecord[1]);
+        if ($parser->validTag($componentTag)) {
+            if ($componentTag == 'MAP') {
+                while ($componentDepth >= $parser::LEVEL_3) {
+                    $parser->getNextLineFromRecord();
+                    $currentRecord = $parser->explodeCurrentLine();
+                    $componentDepth = (int) $currentRecord[0];
+                    $componentTag = trim($currentRecord[1]);
+                    if (isset($currentRecord[2])) {
+                        $value = $currentRecord[2];
+                        if ($parser->validTag($componentTag)) {
+                            switch ($componentTag) {
+                                case 'LATI':
+                                    $place->setLatitude($value);
+                                    break;
+                                case 'LONG':
+                                    $place->setLongitude($value);
+                                    break;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        $parser->back(); 
         return $place;
     }
 }

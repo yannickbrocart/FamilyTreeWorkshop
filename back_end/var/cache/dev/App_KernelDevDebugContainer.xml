@@ -411,9 +411,6 @@
       <tag name="controller.service_arguments"/>
       <tag name="routing.route_loader"/>
     </service>
-    <service id="App\Entity" class="App\Entity" abstract="true">
-      <tag name="container.excluded" source="in &quot;config/services.yaml&quot;"/>
-    </service>
     <service id="App\Controller\DataController" class="App\Controller\DataController" public="true" autowire="true" autoconfigure="true">
       <tag name="controller.service_arguments"/>
       <tag name="container.service_subscriber"/>
@@ -424,6 +421,7 @@
     <service id="App\Controller\Files\ImportGedcomFileController" class="App\Controller\Files\ImportGedcomFileController" public="true" autowire="true" autoconfigure="true">
       <tag name="controller.service_arguments"/>
       <tag name="container.service_subscriber"/>
+      <argument type="service" id="App\Repository\ComponentLevelDataTypes\NameRepository"/>
       <call method="setContainer">
         <argument type="service" id=".service_locator.jUv.zyj.App\Controller\Files\ImportGedcomFileController"/>
       </call>
@@ -450,6 +448,7 @@
     </service>
     <service id="App\DataFixtures\GedcomFixtures" class="App\DataFixtures\GedcomFixtures" autowire="true" autoconfigure="true">
       <tag name="doctrine.fixture.orm"/>
+      <argument type="service" id="App\Repository\UserRepository"/>
     </service>
     <service id="App\DataFixtures\PlaceFixtures" class="App\DataFixtures\PlaceFixtures" autowire="true" autoconfigure="true">
       <tag name="doctrine.fixture.orm"/>
@@ -458,6 +457,23 @@
       <tag name="doctrine.fixture.orm"/>
       <argument type="service" id="security.user_password_hasher"/>
     </service>
+    <service id="App\Entity\ComponentLevelDataTypes\EventDetail" class="App\Entity\ComponentLevelDataTypes\EventDetail" autowire="true" autoconfigure="true"/>
+    <service id="App\Entity\ComponentLevelDataTypes\IndividualEventDetail" class="App\Entity\ComponentLevelDataTypes\IndividualEventDetail" autowire="true" autoconfigure="true"/>
+    <service id="App\Entity\ComponentLevelDataTypes\IndividualEvents" class="App\Entity\ComponentLevelDataTypes\IndividualEvents" autowire="true" autoconfigure="true"/>
+    <service id="App\Entity\ComponentLevelDataTypes\Name" class="App\Entity\ComponentLevelDataTypes\Name" autowire="true" autoconfigure="true"/>
+    <service id="App\Entity\ComponentLevelDataTypes\NamePiece" class="App\Entity\ComponentLevelDataTypes\NamePiece" autowire="true" autoconfigure="true"/>
+    <service id="App\Entity\ComponentLevelDataTypes\Place" class="App\Entity\ComponentLevelDataTypes\Place" autowire="true" autoconfigure="true"/>
+    <service id="App\Entity\Gedcom" class="App\Entity\Gedcom" autowire="true" autoconfigure="true"/>
+    <service id="App\Entity\ResetPasswordRequest" class="App\Entity\ResetPasswordRequest" autowire="true" autoconfigure="true">
+      <tag name="container.error" message="Cannot autowire service &quot;App\Entity\ResetPasswordRequest&quot;: argument &quot;$user&quot; of method &quot;__construct()&quot; is type-hinted &quot;object&quot;, you should configure its value explicitly."/>
+    </service>
+    <service id="App\Entity\TopLevelDataTypes\Family" class="App\Entity\TopLevelDataTypes\Family" autowire="true" autoconfigure="true"/>
+    <service id="App\Entity\TopLevelDataTypes\Header" class="App\Entity\TopLevelDataTypes\Header" autowire="true" autoconfigure="true"/>
+    <service id="App\Entity\TopLevelDataTypes\Individual" class="App\Entity\TopLevelDataTypes\Individual" autowire="true" autoconfigure="true"/>
+    <service id="App\Entity\TreeDataTypes\TreeIndividualNode" class="App\Entity\TreeDataTypes\TreeIndividualNode" autowire="true" autoconfigure="true">
+      <tag name="container.error" message="Cannot autowire service &quot;App\Entity\TreeDataTypes\TreeIndividualNode&quot;: argument &quot;$name&quot; of method &quot;__construct()&quot; is type-hinted &quot;string&quot;, you should configure its value explicitly."/>
+    </service>
+    <service id="App\Entity\User" class="App\Entity\User" autowire="true" autoconfigure="true"/>
     <service id="App\Parser\ParseCommon" class="App\Parser\ParseCommon" autowire="true" autoconfigure="true"/>
     <service id="App\Parser\ParseFamily" class="App\Parser\ParseFamily" autowire="true" autoconfigure="true"/>
     <service id="App\Parser\ParseGedcomToModel" class="App\Parser\ParseGedcomToModel" autowire="true" autoconfigure="true"/>
@@ -471,7 +487,7 @@
       <tag name="doctrine.repository_service"/>
       <argument type="service" id="doctrine"/>
     </service>
-    <service id="App\Repository\ComponentLevelDataTypes\IndividualEventsRepository" class="App\Repository\ComponentLevelDataTypes\IndividualEventsRepository" autowire="true" autoconfigure="true">
+    <service id="App\Repository\ComponentLevelDataTypes\IndividualEventRepository" class="App\Repository\ComponentLevelDataTypes\IndividualEventRepository" autowire="true" autoconfigure="true">
       <tag name="doctrine.repository_service"/>
       <argument type="service" id="doctrine"/>
     </service>
@@ -5192,7 +5208,7 @@
     <service id="doctrine.orm.configuration" class="Doctrine\ORM\Configuration" abstract="true"/>
     <service id="doctrine.orm.entity_manager.abstract" class="Doctrine\ORM\EntityManager" lazy="true" abstract="true"/>
     <service id="doctrine.orm.container_repository_factory" class="Doctrine\Bundle\DoctrineBundle\Repository\ContainerRepositoryFactory">
-      <argument type="service" id=".service_locator.4OG3fHu"/>
+      <argument type="service" id=".service_locator.K.Y9TVR"/>
     </service>
     <service id="doctrine.orm.manager_configurator.abstract" class="Doctrine\Bundle\DoctrineBundle\ManagerConfigurator" abstract="true">
       <argument type="collection"/>
@@ -7467,8 +7483,8 @@
     <service id=".abstract.instanceof.App\Repository\ComponentLevelDataTypes\EventDetailRepository" class="App\Repository\ComponentLevelDataTypes\EventDetailRepository" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepositoryInterface.0.App\Repository\ComponentLevelDataTypes\IndividualEventDetailRepository" class="App\Repository\ComponentLevelDataTypes\IndividualEventDetailRepository" autowire="true" abstract="true"/>
     <service id=".abstract.instanceof.App\Repository\ComponentLevelDataTypes\IndividualEventDetailRepository" class="App\Repository\ComponentLevelDataTypes\IndividualEventDetailRepository" autowire="true" autoconfigure="true" abstract="true"/>
-    <service id=".instanceof.Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepositoryInterface.0.App\Repository\ComponentLevelDataTypes\IndividualEventsRepository" class="App\Repository\ComponentLevelDataTypes\IndividualEventsRepository" autowire="true" abstract="true"/>
-    <service id=".abstract.instanceof.App\Repository\ComponentLevelDataTypes\IndividualEventsRepository" class="App\Repository\ComponentLevelDataTypes\IndividualEventsRepository" autowire="true" autoconfigure="true" abstract="true"/>
+    <service id=".instanceof.Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepositoryInterface.0.App\Repository\ComponentLevelDataTypes\IndividualEventRepository" class="App\Repository\ComponentLevelDataTypes\IndividualEventRepository" autowire="true" abstract="true"/>
+    <service id=".abstract.instanceof.App\Repository\ComponentLevelDataTypes\IndividualEventRepository" class="App\Repository\ComponentLevelDataTypes\IndividualEventRepository" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepositoryInterface.0.App\Repository\ComponentLevelDataTypes\NamePieceRepository" class="App\Repository\ComponentLevelDataTypes\NamePieceRepository" autowire="true" abstract="true"/>
     <service id=".abstract.instanceof.App\Repository\ComponentLevelDataTypes\NamePieceRepository" class="App\Repository\ComponentLevelDataTypes\NamePieceRepository" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepositoryInterface.0.App\Repository\ComponentLevelDataTypes\NameRepository" class="App\Repository\ComponentLevelDataTypes\NameRepository" autowire="true" abstract="true"/>
@@ -7929,7 +7945,7 @@
       <tag name="container.service_locator"/>
       <argument type="collection">
         <argument key="entityManager" type="service_closure" id="doctrine.orm.default_entity_manager"/>
-        <argument key="user" type="service_closure" id=".errored..service_locator.URv18j3.App\Entity\User"/>
+        <argument key="user" type="service_closure" id="App\Entity\User"/>
         <argument key="userPasswordHasher" type="service_closure" id="security.user_password_hasher"/>
       </argument>
     </service>
@@ -8265,12 +8281,12 @@
         <argument key="doctrine.orm.messenger.doctrine_schema_listener" type="service_closure" id="doctrine.orm.messenger.doctrine_schema_listener"/>
       </argument>
     </service>
-    <service id=".service_locator.4OG3fHu" class="Symfony\Component\DependencyInjection\ServiceLocator">
+    <service id=".service_locator.K.Y9TVR" class="Symfony\Component\DependencyInjection\ServiceLocator">
       <tag name="container.service_locator"/>
       <argument type="collection">
         <argument key="App\Repository\ComponentLevelDataTypes\EventDetailRepository" type="service_closure" id="App\Repository\ComponentLevelDataTypes\EventDetailRepository"/>
         <argument key="App\Repository\ComponentLevelDataTypes\IndividualEventDetailRepository" type="service_closure" id="App\Repository\ComponentLevelDataTypes\IndividualEventDetailRepository"/>
-        <argument key="App\Repository\ComponentLevelDataTypes\IndividualEventsRepository" type="service_closure" id="App\Repository\ComponentLevelDataTypes\IndividualEventsRepository"/>
+        <argument key="App\Repository\ComponentLevelDataTypes\IndividualEventRepository" type="service_closure" id="App\Repository\ComponentLevelDataTypes\IndividualEventRepository"/>
         <argument key="App\Repository\ComponentLevelDataTypes\NamePieceRepository" type="service_closure" id="App\Repository\ComponentLevelDataTypes\NamePieceRepository"/>
         <argument key="App\Repository\ComponentLevelDataTypes\NameRepository" type="service_closure" id="App\Repository\ComponentLevelDataTypes\NameRepository"/>
         <argument key="App\Repository\ComponentLevelDataTypes\PlaceRepository" type="service_closure" id="App\Repository\ComponentLevelDataTypes\PlaceRepository"/>
@@ -9046,9 +9062,6 @@
     <service id="debug.security.event_dispatcher.api.inner" class="Symfony\Component\EventDispatcher\EventDispatcher"/>
     <service id=".errored..service_locator.y4_Zrx..Symfony\Component\Config\Loader\LoaderInterface" class="Symfony\Component\Config\Loader\LoaderInterface">
       <tag name="container.error" message="Cannot autowire service &quot;.service_locator.y4_Zrx.&quot;: it needs an instance of &quot;Symfony\Component\Config\Loader\LoaderInterface&quot; but this type has been excluded from autowiring."/>
-    </service>
-    <service id=".errored..service_locator.URv18j3.App\Entity\User" class="App\Entity\User">
-      <tag name="container.error" message="Cannot autowire service &quot;.service_locator.URv18j3&quot;: it needs an instance of &quot;App\Entity\User&quot; but this type has been excluded in &quot;config/services.yaml&quot;."/>
     </service>
     <service id=".console.command.about.lazy" class="Symfony\Component\Console\Command\LazyCommand">
       <argument>about</argument>
@@ -10300,7 +10313,7 @@
     <service id=".service_locator.gFlme_s" alias=".service_locator.y4_Zrx."/>
     <service id=".service_locator.xSdNvgP" alias=".service_locator.n.m5dth"/>
     <service id=".service_locator.CvAJ1kL" alias=".service_locator.2UVx68m"/>
-    <service id=".service_locator.GdPrAYu" alias=".service_locator.URv18j3"/>
+    <service id=".service_locator.PvY5jbk" alias=".service_locator.URv18j3"/>
     <service id=".service_locator.025Wi8b" alias=".service_locator.kPUOGb8"/>
     <service id=".service_locator.ostNlSn" alias=".service_locator.EE0.cm9"/>
     <service id=".service_locator.W47vLMj" alias=".service_locator.Mhqdd2r"/>

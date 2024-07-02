@@ -33,6 +33,7 @@ class Gedcom
     private Collection $individuals;
     
     #[ORM\OneToMany(mappedBy: 'gedcom', targetEntity: Family::class, orphanRemoval: true)]
+    #[Groups(['model_to_json'])]
     private Collection $families;
 
     #[ORM\Column(length: 4)]
@@ -49,6 +50,9 @@ class Gedcom
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     #[Groups(['managegenealogy_to_json'])]
     private ?\DateTimeInterface $lastModifiedDate = null;
+
+    #[ORM\ManyToOne(inversedBy: 'user')]
+    private ?User $user = null;
 
     public function __construct()
     {
@@ -87,20 +91,20 @@ class Gedcom
     {
         if (!$this->families->contains($family)) {
             $this->families->add($family);
-            $family->setGedcom($this);
+            //$family->setGedcom($this);
         }
         return $this;
     }
 
     public function removeFamily(Family $family): static
     {
-        if ($this->families->removeElement($family)) {
+        $this->families->removeElement($family);
+        /*if ($this->families->removeElement($family)) {
             // set the owning side to null (unless already changed)
             if ($family->getGedcom() === $this) {
                 $family->setGedcom(null);
             }
-        }
-
+        }*/
         return $this;
     }
 
@@ -173,6 +177,18 @@ class Gedcom
     public function setLastModifiedDate(\DateTimeInterface $lastModifiedDate): static
     {
         $this->lastModifiedDate = $lastModifiedDate;
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): static
+    {
+        $this->user = $user;
+
         return $this;
     }
 }

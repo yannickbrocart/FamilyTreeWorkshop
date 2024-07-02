@@ -63,7 +63,8 @@
             <div class="col-md-1 genealogy-list-value">{{family.id}}</div>
             <div class="col-md-4 genealogy-list-value">{{family.husband}}</div>
             <div class="col-md-4 female genealogy-list-value">{{family.wife}}</div>
-            <div [ngClass]="family.childs[0].sex === 'M' ? 'col-md-3 genealogy-list-value' : 'col-md-3 female genealogy-list-value'">
+            <div *ngIf="family.childs.length >=1"
+                [ngClass]="family.childs[0].sex === 'M' ? 'col-md-3 genealogy-list-value' : 'col-md-3 female genealogy-list-value'">
                 <span *ngFor="let child of family.childs; let id = index">
                     <span *ngIf="id == 0; else elseBlock">{{id+1}} - {{child.firstName}} {{child.lastName | uppercase}}</span>
                     <ng-template #elseBlock>
@@ -71,23 +72,24 @@
                     </ng-template>
                 </span>
             </div>
-        </div> 
+            </div>
     </div>   
 </div>
+
 
 <div *ngIf="isPlaceList == true" class="genealogy-list mt-4">
     <div class="row">
         <div class="col-md-1 genealogy-list-title">#</div>
-        <div class="col-md-6 genealogy-list-title">Name</div>
-        <div class="col-md-2 genealogy-list-title">Lattitude</div>
-        <div class="col-md-3 genealogy-list-title">Longitude</div>
+        <div class="col-md-7 genealogy-list-title">Name</div>
+        <div class="col-md-2 genealogy-list-title">Latitude</div>
+        <div class="col-md-2 genealogy-list-title">Longitude</div>
     </div>
     <div *ngFor="let place of places; let id = index">
         <div class="row stripped">
             <div class="col-md-1 genealogy-list-value">{{id}}</div>
-            <div class="col-md-6 genealogy-list-value">{{place.name | uppercase}}</div>
-            <div class="col-md-2 genealogy-list-value">{{place.lattitude}}</div>
-            <div class="col-md-3 genealogy-list-value">{{place.longitude}}</div>
+            <div class="col-md-7 genealogy-list-value">{{place.name}}</div>
+            <div class="col-md-2 genealogy-list-value">{{place.latitude}}</div>
+            <div class="col-md-2 genealogy-list-value">{{place.longitude}}</div>
         </div> 
     </div>   
 </div>

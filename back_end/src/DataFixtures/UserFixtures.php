@@ -6,14 +6,20 @@ use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 
-class UserFixtures extends Fixture
+class UserFixtures extends Fixture implements OrderedFixtureInterface
 {
     private $userPasswordHasher;
     
     public function __construct(UserPasswordHasherInterface $userPasswordHasher)
     {
         $this->userPasswordHasher = $userPasswordHasher;
+    }
+
+    public function getOrder(): int
+    {
+        return 1; // smaller means sooner
     }
 
     public function load(ObjectManager $manager): void
