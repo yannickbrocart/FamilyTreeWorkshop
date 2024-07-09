@@ -8,5 +8,4 @@ import { Genealogy } from '../genealogy/genealogy.component';
 })
 export class GenealogyViewComponent {
   @Input() genealogy: Genealogy  | undefined;
-
 }

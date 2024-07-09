@@ -9,14 +9,14 @@
                     <label for="firstname" class="form-label">First name</label>
                     <input type="text" class="form-control form-control-lg" formControlName='firstname'>
                     <i class="fa-solid icon-row" [ngClass]="{
-                        'fa-xmark': !contactusForm.controls.firstname.valid && contactusForm.controls.firstname.touched,
+                        'fa-xmark': !contactusForm.controls.firstname.valid && contactusForm.controls.firstname.dirty,
                         'fa-check': contactusForm.controls.firstname.valid }"></i>
                     </div>
                 <div id="icon-div" class="mb-3 col-12 col-lg-6">
                     <label for="lastname" class="form-label">Last name</label>
                     <input type="text" class="form-control form-control-lg" formControlName='lastname'>
                     <i class="fa-solid icon-row" [ngClass]="{
-                        'fa-xmark': !contactusForm.controls.lastname.valid && contactusForm.controls.lastname.touched,
+                        'fa-xmark': !contactusForm.controls.lastname.valid && contactusForm.controls.lastname.dirty,
                         'fa-check': contactusForm.controls.lastname.valid }"></i>
                 </div>
             </div>
@@ -25,14 +25,14 @@
                     <label for="email" class="form-label">Email</label>
                     <input type="email" class="form-control form-control-lg" formControlName='email'>
                     <i class="fa-solid icon-row" [ngClass]="{
-                        'fa-xmark': !contactusForm.controls.email.valid && contactusForm.controls.email.touched,
+                        'fa-xmark': !contactusForm.controls.email.valid && contactusForm.controls.email.dirty,
                         'fa-check': contactusForm.controls.email.valid }"></i>
                 </div>
                 <div id="icon-div" class="mb-3 col-12 col-lg-6">
                     <label for="phone" class="form-label">Phone</label>
                     <input type="text" class="form-control form-control-lg" formControlName='phone'>
                     <i class="fa-solid icon-row" [ngClass]="{
-                        'fa-xmark': !contactusForm.controls.phone.valid && contactusForm.controls.phone.touched,
+                        'fa-xmark': !contactusForm.controls.phone.valid && contactusForm.controls.phone.dirty,
                         'fa-check': contactusForm.controls.phone.valid }"></i>
                 </div>
             </div>
@@ -40,7 +40,7 @@
                 <label for="message" class="form-label">Message</label>
                 <textarea class="form-control form-control-lg" formControlName='message' rows="5"></textarea>
                 <i class="fa-solid icon-row" [ngClass]="{
-                    'fa-xmark': !contactusForm.controls.message.valid && contactusForm.controls.message.touched,
+                    'fa-xmark': !contactusForm.controls.message.valid && contactusForm.controls.message.dirty,
                     'fa-check': contactusForm.controls.message.valid }"></i>
             </div>
             <div class="row">

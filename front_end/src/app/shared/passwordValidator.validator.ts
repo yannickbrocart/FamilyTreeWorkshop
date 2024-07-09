@@ -11,7 +11,7 @@ export const passwordPattern =
   atLeastOneDigitPattern + atLeastOneSpecialCharacterPattern + '.{12,80}$';
 export const phonePattern = countryCodePattern + digitPattern;
 export const namePattern = '^[A-Z][A-Za-z\\s\'-]*$';
-export const usernamePattern = '^[A-Z][A-Za-z0-9-_]*$';
+export const usernamePattern = '^[A-Za-z0-9-_]*$';
 
 
 export function matchValidator(control: AbstractControl) {

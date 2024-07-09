@@ -45,7 +45,9 @@ class ImportGedcomFileController extends AbstractController
         if ($this->openFile($request->getPayload()->get('file'))) {
             $this->gedcom = $parseGedcomToModel->Parse($this->gedcom, $this->gedcomFile);
             fclose($this->gedcomFile);
-        } else return $this->response->setStatusCode($this->statusCode);   
+        } else {
+            return $this->response->setStatusCode($this->statusCode);   
+        }
         
         /*try {
             $this->saveGenealogy($request->getPayload()->get('genealogyName'), $em);           
@@ -63,7 +65,6 @@ class ImportGedcomFileController extends AbstractController
         $this->response->setContent($serializeModel->serializeToView($this->gedcom));
         $this->response->setStatusCode(Response::HTTP_OK);
         return $this->response;
-        return new JsonResponse();
     }
 
     

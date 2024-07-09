@@ -16,6 +16,7 @@ class Place
     private ?int $id = null;
 
     #[ORM\Column(length: 120)]
+    #[Groups(['model_to_json'])]
     private ?string $name = null;
 
     #[ORM\Column(length: 10, nullable: true)]

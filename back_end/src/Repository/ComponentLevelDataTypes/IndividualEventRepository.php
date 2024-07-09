@@ -2,7 +2,7 @@
 
 namespace App\Repository\ComponentLevelDataTypes;
 
-use App\Entity\ComponentLevelDataTypes\IndividualEvents;
+use App\Entity\ComponentLevelDataTypes\IndividualEvent;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -13,7 +13,7 @@ class IndividualEventRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, IndividualEvents::class);
+        parent::__construct($registry, IndividualEvent::class);
     }
 
     //    /**

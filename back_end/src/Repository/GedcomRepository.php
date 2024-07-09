@@ -11,7 +11,7 @@ use Doctrine\Persistence\ManagerRegistry;
  *
  * @method Gedcom|null find($id, $lockMode = null, $lockVersion = null)
  * @method Gedcom|null findOneBy(array $criteria, array $orderBy = null)
- * @method Gedcom[]    findAll()
+ * @method Gedcom[]    findAll(int $userId)
  * @method Gedcom[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
 class GedcomRepository extends ServiceEntityRepository
@@ -20,7 +20,19 @@ class GedcomRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Gedcom::class);
     }
-
+    
+    public function getGedcomByUserEmail(string $email): ?array
+    {
+        return $this->createQueryBuilder('a')
+           ->join('a.user', 'u')
+           ->andWhere('u.email = :val')   
+           ->setParameter('val', $email)
+           ->orderBy('a.id', 'ASC')
+           ->getQuery()
+           ->getResult()
+       ;
+    }
+    
     public function update(Gedcom $gedcom, bool $flush = false): void
     {
         $this->getEntityManager()->persist($gedcom);

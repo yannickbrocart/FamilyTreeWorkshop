@@ -33,7 +33,7 @@ export class ParseService {
   }
 
   parseJsonToListByFamily(jsonFromApi: any) {
-    var individual: Individual = {};
+    //var individual: Individual = {};
     var child: Individual = {};
 
     if (jsonFromApi['families']) {
@@ -75,17 +75,25 @@ export class ParseService {
     var longitude;
     if (jsonFromApi['individuals']) {
       for (var i = 0; i < jsonFromApi['individuals'].length; i++) {
-        if (jsonFromApi['individuals'][i]['individualEvents']['birthDetail']['eventDetail']['place']['name']) {
-            name = jsonFromApi['individuals'][i]['individualEvents']['birthDetail']['eventDetail']['place']['name']
-            name = name.replace(/(,)/gi, ', ');
-            latitude = jsonFromApi['individuals'][i]['individualEvents']['birthDetail']['eventDetail']['place']['latitude']
-            longitude = jsonFromApi['individuals'][i]['individualEvents']['birthDetail']['eventDetail']['place']['longitude']
-          } 
+        if (jsonFromApi['individuals'][i]['individualEvents'][0]['birthDetail']['eventDetail']['place']['name']) {
+          name = jsonFromApi['individuals'][i]['individualEvents'][0]['birthDetail']['eventDetail']['place']['name']
+          name = name.replace(/(,)/gi, ', ');
+          latitude = jsonFromApi['individuals'][i]['individualEvents'][0]['birthDetail']['eventDetail']['place']['latitude']
+          longitude = jsonFromApi['individuals'][i]['individualEvents'][0]['birthDetail']['eventDetail']['place']['longitude']
           place = {name: name, latitude: latitude, longitude: longitude};
-          if (!listByPlace.find((element) => element.name === place.name)) 
-            { listByPlace.push(place)};
+          if (!listByPlace.find((element) => element.name === place.name)) listByPlace.push(place);
+        }
+        if (jsonFromApi['individuals'][i]['individualEvents']['death']) {
+          name = jsonFromApi['individuals'][i]['individualEvents'][0]['deathDetail']['eventDetail']['place']['name']
+          name = name.replace(/(,)/gi, ', ');
+          latitude = jsonFromApi['individuals'][i]['individualEvents'][0]['deathDetail']['eventDetail']['place']['latitude']
+          longitude = jsonFromApi['individuals'][i]['individualEvents'][0]['deathDetail']['eventDetail']['place']['longitude']
+          place = {name: name, latitude: latitude, longitude: longitude};
+          if (!listByPlace.find((element) => element.name === place.name)) listByPlace.push(place);
         }
       }
+    } 
+        
     return listByPlace.sort((a,b) => (a.name > b.name ? 1 : -1));
   }
 
@@ -135,11 +143,11 @@ export class ParseService {
         sex = 'M';
       } else if (jsonFromApi['individuals'][i]['sex'] == 'Female') sex = 'F';
     } else sex = '';
-    if (jsonFromApi['individuals'][i]['individualEvents']['birthDetail']) {
-      birthDate = jsonFromApi['individuals'][i]['individualEvents']['birthDetail']['eventDetail']['date'].substr(0, 4);
+    if (jsonFromApi['individuals'][i]['individualEvents'][0]['birthDetail']) {
+      birthDate = jsonFromApi['individuals'][i]['individualEvents'][0]['birthDetail']['eventDetail']['date'].substr(0, 4);
     } else birthDate = '';
-    if (jsonFromApi['individuals'][i]['individualEvents']['deathDetail']) {
-      deathDate = jsonFromApi['individuals'][i]['individualEvents']['deathDetail']['eventDetail']['date'].substr(0, 4);
+    if (jsonFromApi['individuals'][i]['individualEvents'][0]['deathDetail']) {
+      deathDate = jsonFromApi['individuals'][i]['individualEvents'][0]['deathDetail']['eventDetail']['date'].substr(0, 4);
     } else deathDate = '';
     individual = { firstName: firstName, lastName: lastName, sex: sex, birthDate: birthDate, deathDate: deathDate };
     return individual;

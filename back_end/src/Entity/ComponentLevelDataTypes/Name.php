@@ -24,11 +24,11 @@ class Name
     #[Groups(['model_to_json'])]
     private ?KnownNameTypes $type = null;
 
-    #[ORM\OneToMany(targetEntity: NamePiece::class, mappedBy: 'name')]
+    #[ORM\OneToMany(targetEntity: 'App\Entity\ComponentLevelDataTypes\NamePiece', mappedBy: 'name')]
     #[Groups(['model_to_json'])]
     private Collection $namePieces;
 
-    #[ORM\ManyToOne(inversedBy: 'names')]
+    #[ORM\ManyToOne(targetEntity: Individual::class, inversedBy: 'names')]
     private ?Individual $individual = null;
 
     public function __construct()
@@ -90,7 +90,6 @@ class Name
     public function setIndividual(?Individual $individual): static
     {
         $this->individual = $individual;
-
         return $this;
     }
 }

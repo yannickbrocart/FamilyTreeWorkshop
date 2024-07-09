@@ -12,7 +12,6 @@ class EncoderConfig
 {
     private $service;
     private $signatureAlgorithm;
-    private $cryptoEngine;
     private $_usedProperties = [];
 
     /**
@@ -41,20 +40,6 @@ class EncoderConfig
         return $this;
     }
 
-    /**
-     * @default 'openssl'
-     * @param ParamConfigurator|'openssl'|'phpseclib' $value
-     * @deprecated The "encoder.crypto_engine" configuration key is deprecated since version 2.5, built-in encoders support OpenSSL only
-     * @return $this
-     */
-    public function cryptoEngine($value): static
-    {
-        $this->_usedProperties['cryptoEngine'] = true;
-        $this->cryptoEngine = $value;
-
-        return $this;
-    }
-
     public function __construct(array $value = [])
     {
         if (array_key_exists('service', $value)) {
@@ -67,12 +52,6 @@ class EncoderConfig
             $this->_usedProperties['signatureAlgorithm'] = true;
             $this->signatureAlgorithm = $value['signature_algorithm'];
             unset($value['signature_algorithm']);
-        }
-
-        if (array_key_exists('crypto_engine', $value)) {
-            $this->_usedProperties['cryptoEngine'] = true;
-            $this->cryptoEngine = $value['crypto_engine'];
-            unset($value['crypto_engine']);
         }
 
         if ([] !== $value) {
@@ -88,9 +67,6 @@ class EncoderConfig
         }
         if (isset($this->_usedProperties['signatureAlgorithm'])) {
             $output['signature_algorithm'] = $this->signatureAlgorithm;
-        }
-        if (isset($this->_usedProperties['cryptoEngine'])) {
-            $output['crypto_engine'] = $this->cryptoEngine;
         }
 
         return $output;

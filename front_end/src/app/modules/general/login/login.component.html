@@ -17,7 +17,7 @@
                 <label for="email" class="form-label">Email</label>
                 <input type="email" class="form-control form-control-lg" formControlName='email'>
                 <i class="fa-solid icon-row" [ngClass]="{
-                    'fa-xmark': !loginForm.controls.email.valid && loginForm.controls.email.touched,
+                    'fa-xmark': !loginForm.controls.email.valid && loginForm.controls.email.dirty,
                     'fa-check': loginForm.controls.email.valid }"></i>
             </div>
             <div id="icon-div" class="mb-3">
@@ -27,8 +27,8 @@
                 <i class="fa-solid icon-row" [ngClass]="{
                     'fa-eye-slash': !showPassword, 
                     'fa-eye': showPassword,
-                    'xmark-color': !loginForm.controls.password.valid && loginForm.controls.password.touched,
-                    'check-color': loginForm.controls.password.valid }" 
+                    'xmark-color': !loginForm.controls.password.valid && loginForm.controls.password.dirty,
+                    'check-color': loginForm.controls.password.valid && !loginForm.controls.password.hasError('requiresDigit')}" 
                     (click)="showPassword = jwtAuthService.toggleShowPassword(showPassword)"></i>
                 <div id="emailHelp" class="form-text">
                     Password must be at least 12 caracters long and contain<br> 

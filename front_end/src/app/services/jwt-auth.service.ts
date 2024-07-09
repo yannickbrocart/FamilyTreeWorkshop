@@ -4,9 +4,6 @@ import { Router } from '@angular/router';
 import { map, BehaviorSubject } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
-const headers = new HttpHeaders()
-  .set("Content-Type", "application/json");
-
 
 @Injectable({
   providedIn: 'root'
@@ -59,9 +56,5 @@ export class JwtAuthService {
       'username' : username
       })
   }
-
-  import (file: String, genealogyName: String) {
-    return this.http.post(environment.apiURL + '/files/import', {'file': file, 'genealogyName': name}, {headers})
-   }
 
 }

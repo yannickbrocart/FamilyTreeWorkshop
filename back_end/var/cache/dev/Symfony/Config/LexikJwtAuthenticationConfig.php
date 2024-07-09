@@ -8,6 +8,7 @@ require_once __DIR__.\DIRECTORY_SEPARATOR.'LexikJwtAuthentication'.\DIRECTORY_SE
 require_once __DIR__.\DIRECTORY_SEPARATOR.'LexikJwtAuthentication'.\DIRECTORY_SEPARATOR.'ApiPlatformConfig.php';
 require_once __DIR__.\DIRECTORY_SEPARATOR.'LexikJwtAuthentication'.\DIRECTORY_SEPARATOR.'AccessTokenIssuanceConfig.php';
 require_once __DIR__.\DIRECTORY_SEPARATOR.'LexikJwtAuthentication'.\DIRECTORY_SEPARATOR.'AccessTokenVerificationConfig.php';
+require_once __DIR__.\DIRECTORY_SEPARATOR.'LexikJwtAuthentication'.\DIRECTORY_SEPARATOR.'BlocklistTokenConfig.php';
 
 use Symfony\Component\Config\Loader\ParamConfigurator;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
@@ -17,8 +18,6 @@ use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
  */
 class LexikJwtAuthenticationConfig implements \Symfony\Component\Config\Builder\ConfigBuilderInterface
 {
-    private $privateKeyPath;
-    private $publicKeyPath;
     private $publicKey;
     private $additionalPublicKeys;
     private $secretKey;
@@ -27,7 +26,6 @@ class LexikJwtAuthenticationConfig implements \Symfony\Component\Config\Builder\
     private $allowNoExpiration;
     private $clockSkew;
     private $encoder;
-    private $userIdentityField;
     private $userIdClaim;
     private $tokenExtractors;
     private $removeTokenFromBodyWhenCookiesUsed;
@@ -35,35 +33,8 @@ class LexikJwtAuthenticationConfig implements \Symfony\Component\Config\Builder\
     private $apiPlatform;
     private $accessTokenIssuance;
     private $accessTokenVerification;
+    private $blocklistToken;
     private $_usedProperties = [];
-
-    /**
-     * @default null
-     * @param ParamConfigurator|mixed $value
-     * @deprecated The "lexik_jwt_authentication.private_key_path" configuration key is deprecated since version 2.5. Use "lexik_jwt_authentication.secret_key" instead.
-     * @return $this
-     */
-    public function privateKeyPath($value): static
-    {
-        $this->_usedProperties['privateKeyPath'] = true;
-        $this->privateKeyPath = $value;
-
-        return $this;
-    }
-
-    /**
-     * @default null
-     * @param ParamConfigurator|mixed $value
-     * @deprecated The "lexik_jwt_authentication.public_key_path" configuration key is deprecated since version 2.5. Use "lexik_jwt_authentication.public_key" instead.
-     * @return $this
-     */
-    public function publicKeyPath($value): static
-    {
-        $this->_usedProperties['publicKeyPath'] = true;
-        $this->publicKeyPath = $value;
-
-        return $this;
-    }
 
     /**
      * The key used to sign tokens (useless for HMAC). If not set, the key will be automatically computed from the secret key.
@@ -160,7 +131,7 @@ class LexikJwtAuthenticationConfig implements \Symfony\Component\Config\Builder\
     }
 
     /**
-     * @default {"service":"lexik_jwt_authentication.encoder.lcobucci","signature_algorithm":"RS256","crypto_engine":"openssl"}
+     * @default {"service":"lexik_jwt_authentication.encoder.lcobucci","signature_algorithm":"RS256"}
     */
     public function encoder(array $value = []): \Symfony\Config\LexikJwtAuthentication\EncoderConfig
     {
@@ -176,21 +147,6 @@ class LexikJwtAuthenticationConfig implements \Symfony\Component\Config\Builder\
 
     /**
      * @default 'username'
-     * @param ParamConfigurator|mixed $value
-     * @deprecated The "lexik_jwt_authentication.user_identity_field" configuration key is deprecated since version 2.16, use "lexik_jwt_authentication.user_id_claim" or implement "Symfony\Component\Security\Core\User\UserInterface::getUserIdentifier()" instead.
-     * @return $this
-     */
-    public function userIdentityField($value): static
-    {
-        $this->_usedProperties['userIdentityField'] = true;
-        $this->userIdentityField = $value;
-
-        return $this;
-    }
-
-    /**
-     * If null, the user ID claim will have the same name as the one defined by the option "user_identity_field"
-     * @default null
      * @param ParamConfigurator|mixed $value
      * @return $this
      */
@@ -321,6 +277,32 @@ class LexikJwtAuthenticationConfig implements \Symfony\Component\Config\Builder\
         return $this->accessTokenVerification;
     }
 
+    /**
+     * @template TValue
+     * @param TValue $value
+     * @default {"enabled":false,"cache":"cache.app"}
+     * @return \Symfony\Config\LexikJwtAuthentication\BlocklistTokenConfig|$this
+     * @psalm-return (TValue is array ? \Symfony\Config\LexikJwtAuthentication\BlocklistTokenConfig : static)
+     */
+    public function blocklistToken(array $value = []): \Symfony\Config\LexikJwtAuthentication\BlocklistTokenConfig|static
+    {
+        if (!\is_array($value)) {
+            $this->_usedProperties['blocklistToken'] = true;
+            $this->blocklistToken = $value;
+
+            return $this;
+        }
+
+        if (!$this->blocklistToken instanceof \Symfony\Config\LexikJwtAuthentication\BlocklistTokenConfig) {
+            $this->_usedProperties['blocklistToken'] = true;
+            $this->blocklistToken = new \Symfony\Config\LexikJwtAuthentication\BlocklistTokenConfig($value);
+        } elseif (0 < \func_num_args()) {
+            throw new InvalidConfigurationException('The node created by "blocklistToken()" has already been initialized. You cannot pass values the second time you call blocklistToken().');
+        }
+
+        return $this->blocklistToken;
+    }
+
     public function getExtensionAlias(): string
     {
         return 'lexik_jwt_authentication';
@@ -328,18 +310,6 @@ class LexikJwtAuthenticationConfig implements \Symfony\Component\Config\Builder\
 
     public function __construct(array $value = [])
     {
-        if (array_key_exists('private_key_path', $value)) {
-            $this->_usedProperties['privateKeyPath'] = true;
-            $this->privateKeyPath = $value['private_key_path'];
-            unset($value['private_key_path']);
-        }
-
-        if (array_key_exists('public_key_path', $value)) {
-            $this->_usedProperties['publicKeyPath'] = true;
-            $this->publicKeyPath = $value['public_key_path'];
-            unset($value['public_key_path']);
-        }
-
         if (array_key_exists('public_key', $value)) {
             $this->_usedProperties['publicKey'] = true;
             $this->publicKey = $value['public_key'];
@@ -388,12 +358,6 @@ class LexikJwtAuthenticationConfig implements \Symfony\Component\Config\Builder\
             unset($value['encoder']);
         }
 
-        if (array_key_exists('user_identity_field', $value)) {
-            $this->_usedProperties['userIdentityField'] = true;
-            $this->userIdentityField = $value['user_identity_field'];
-            unset($value['user_identity_field']);
-        }
-
         if (array_key_exists('user_id_claim', $value)) {
             $this->_usedProperties['userIdClaim'] = true;
             $this->userIdClaim = $value['user_id_claim'];
@@ -436,6 +400,12 @@ class LexikJwtAuthenticationConfig implements \Symfony\Component\Config\Builder\
             unset($value['access_token_verification']);
         }
 
+        if (array_key_exists('blocklist_token', $value)) {
+            $this->_usedProperties['blocklistToken'] = true;
+            $this->blocklistToken = \is_array($value['blocklist_token']) ? new \Symfony\Config\LexikJwtAuthentication\BlocklistTokenConfig($value['blocklist_token']) : $value['blocklist_token'];
+            unset($value['blocklist_token']);
+        }
+
         if ([] !== $value) {
             throw new InvalidConfigurationException(sprintf('The following keys are not supported by "%s": ', __CLASS__).implode(', ', array_keys($value)));
         }
@@ -444,12 +414,6 @@ class LexikJwtAuthenticationConfig implements \Symfony\Component\Config\Builder\
     public function toArray(): array
     {
         $output = [];
-        if (isset($this->_usedProperties['privateKeyPath'])) {
-            $output['private_key_path'] = $this->privateKeyPath;
-        }
-        if (isset($this->_usedProperties['publicKeyPath'])) {
-            $output['public_key_path'] = $this->publicKeyPath;
-        }
         if (isset($this->_usedProperties['publicKey'])) {
             $output['public_key'] = $this->publicKey;
         }
@@ -474,9 +438,6 @@ class LexikJwtAuthenticationConfig implements \Symfony\Component\Config\Builder\
         if (isset($this->_usedProperties['encoder'])) {
             $output['encoder'] = $this->encoder->toArray();
         }
-        if (isset($this->_usedProperties['userIdentityField'])) {
-            $output['user_identity_field'] = $this->userIdentityField;
-        }
         if (isset($this->_usedProperties['userIdClaim'])) {
             $output['user_id_claim'] = $this->userIdClaim;
         }
@@ -497,6 +458,9 @@ class LexikJwtAuthenticationConfig implements \Symfony\Component\Config\Builder\
         }
         if (isset($this->_usedProperties['accessTokenVerification'])) {
             $output['access_token_verification'] = $this->accessTokenVerification instanceof \Symfony\Config\LexikJwtAuthentication\AccessTokenVerificationConfig ? $this->accessTokenVerification->toArray() : $this->accessTokenVerification;
+        }
+        if (isset($this->_usedProperties['blocklistToken'])) {
+            $output['blocklist_token'] = $this->blocklistToken instanceof \Symfony\Config\LexikJwtAuthentication\BlocklistTokenConfig ? $this->blocklistToken->toArray() : $this->blocklistToken;
         }
 
         return $output;

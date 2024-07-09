@@ -2,14 +2,14 @@
 
 namespace App\Entity\TopLevelDataTypes;
 
+use app\Entity\ComponentLevelDataTypes\IndividualEvent;
+use app\Entity\ComponentLevelDataTypes\Name;
 use App\Repository\TopLevelDataTypes\IndividualRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use App\Entity\Gedcom;
 use Doctrine\ORM\Mapping as ORM;
 use App\Entity\EnumeratedValues\KnownSexTypes;
-use app\Entity\ComponentLevelDataTypes\IndividualEvents;
-use app\Entity\ComponentLevelDataTypes\Name;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 
@@ -21,19 +21,19 @@ class Individual
     #[ORM\Column]
     #[Groups(['model_to_json'])]
     private ?int $id = null;
-
+    
     #[ORM\Column(type: 'string', enumType: KnownSexTypes::class, nullable: true)]
     #[Groups(['model_to_json'])]
     private ?KnownSexTypes $sex = null;
 
-    #[ORM\OneToMany(targetEntity: Name::class, mappedBy: 'individual')]
+    #[ORM\OneToMany(targetEntity: 'App\Entity\ComponentLevelDataTypes\Name', mappedBy: 'individual')]
     #[Groups(['model_to_json'])]
     private Collection $names;
 
-    #[ORM\OneToMany(targetEntity: IndividualEvents::class, mappedBy: 'individual')]
+    #[ORM\OneToMany(targetEntity: 'App\Entity\ComponentLevelDataTypes\IndividualEvent', mappedBy: 'individual')]
     #[Groups(['model_to_json'])]
     private Collection $individualEvents;
-
+    
     #[ORM\OneToMany(targetEntity: Family::class, mappedBy: 'person1')]
     #[Groups(['model_to_json'])]
     private Collection $spouseToFamily1;
@@ -43,15 +43,14 @@ class Individual
     private Collection $spouseToFamily2;
 
     #[ORM\ManyToOne(inversedBy: 'childToFamily')]
-    #[Groups(['model_to_json'])]
-    private ?Family $childToFamily = null;
-
+    private ?Family $childToFamily = null;    
+    
     public function __construct()
     {
-        $this->names = new ArrayCollection();
-        $this->individualEvents = new ArrayCollection();
         $this->spouseToFamily1 = new ArrayCollection();
         $this->spouseToFamily2 = new ArrayCollection();
+        $this->names = new ArrayCollection();
+        $this->individualEvents = new ArrayCollection();
     }
 
     public function setId(int $id): static
@@ -96,7 +95,6 @@ class Individual
     public function removeName(Name $name): static
     {
         if ($this->names->removeElement($name)) {
-            // set the owning side to null (unless already changed)
             if ($name->getIndividual() === $this) {
                 $name->setIndividual(null);
             }
@@ -105,14 +103,14 @@ class Individual
     }
 
     /**
-     * @return Collection<int, IndividualEvents>
+     * @return Collection<int, IndividualEvent>
      */
     public function getIndividualEvents(): Collection
     {
         return $this->individualEvents;
     }
 
-    public function addIndividualEvent(IndividualEvents $individualEvent): static
+    public function addIndividualEvent(IndividualEvent $individualEvent): static
     {
         if (!$this->individualEvents->contains($individualEvent)) {
             $this->individualEvents->add($individualEvent);
@@ -121,7 +119,7 @@ class Individual
         return $this;
     }
 
-    public function removeIndividualEvent(IndividualEvents $individualEvent): static
+    public function removeIndividualEvent(IndividualEvent $individualEvent): static
     {
         if ($this->individualEvents->removeElement($individualEvent)) {
             // set the owning side to null (unless already changed)

@@ -1,46 +1,60 @@
-import { HttpClient, HttpErrorResponse, HttpHeaders, HttpResponse } from '@angular/common/http';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { Subject } from 'rxjs';
+import { Subject, BehaviorSubject } from 'rxjs';
+import { environment } from 'src/environments/environment';
+import { CookieService } from 'ngx-cookie-service';
 
-const apiUrl = 'https://127.0.0.1:8000';
-const headers = new HttpHeaders()
-	.set("Content-Type", "application/json");
+const headers = new HttpHeaders().set('Content-Type', 'application/json');
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class DataService {
+  private $isManageGenealogiesData: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true);
+  isManageGenealogies$ = this.$isManageGenealogiesData.asObservable();
 
-  private isManageGenealogiesData = new Subject<any>();
-  private genealogyOpenedData = new Subject<any>();
-  isManageGenealogies$ = this.isManageGenealogiesData.asObservable();
-  genealogyOpenedData$ = this.genealogyOpenedData.asObservable();
+  private $genealogyData: BehaviorSubject<any> = new BehaviorSubject<any>([]);
+  genealogyData$ = this.$genealogyData.asObservable();
 
-  constructor(private http: HttpClient, private router: Router) { }
-  
-  sendIsManageGenealogies(data: boolean) { 
-    this.isManageGenealogiesData.next(data); 
+
+  constructor(private http: HttpClient, private router: Router, private cookieService: CookieService) {}
+
+
+  sendIsManageGenealogies(data: boolean): void {
+    this.$isManageGenealogiesData.next(data); 
   }
 
-  sendGenealogyOpened(data: any) { 
-    this.genealogyOpenedData.next(data); 
+  sendGenealogyData(data: any): void {
+    this.$genealogyData.next(data);
   }
 
   getGenealogies() {
-    return this.http.get(apiUrl + '/genealogy/manage/getall', {headers});
+    var userEmail = this.cookieService.get('username');
+    return this.http.post(environment.apiURL + '/genealogy/manage/getallbyuser', {
+      'userEmail': userEmail},
+      { headers });
   }
 
   openGenealogyById(id: number) {
-    return this.http.get(apiUrl + '/genealogy/manage/getbyid/' + id, {headers});
+    return this.http.post(environment.apiURL + '/genealogy/manage/getbyid/' + id,
+      { headers });
   }
 
   renameGenealogy(id: number, name: string) {
-    return this.http.patch(apiUrl + '/genealogy/manage/renamebyid/' + id, {'name': name});
+    return this.http.patch(environment.apiURL + '/genealogy/manage/renamebyid/' + id,
+      { 'name': name });
   }
 
   deleteGenealogy(id: number) {
-    return this.http.delete(apiUrl + '/genealogy/manage/deletebyid/' + id);
+    return this.http.delete(environment.apiURL + '/genealogy/manage/deletebyid/' + id);
   }
 
+  importGedcom (file: String, genealogyName: String) {
+    return this.http.post(
+      environment.apiURL + '/files/import', {
+        'file': file, 
+        'genealogyName': genealogyName}, 
+        {headers})
+   }
 }

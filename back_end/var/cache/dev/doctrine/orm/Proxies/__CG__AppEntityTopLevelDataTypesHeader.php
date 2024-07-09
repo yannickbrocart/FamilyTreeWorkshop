@@ -8,12 +8,18 @@ namespace Proxies\__CG__\App\Entity\TopLevelDataTypes;
 class Header extends \App\Entity\TopLevelDataTypes\Header implements \Doctrine\ORM\Proxy\InternalProxy
 {
     use \Symfony\Component\VarExporter\LazyGhostTrait {
-        initializeLazyObject as __load;
+        initializeLazyObject as private;
         setLazyObjectAsInitialized as public __setInitialized;
         isLazyObjectInitialized as private;
         createLazyGhost as private;
         resetLazyObject as private;
     }
+
+    public function __load(): void
+    {
+        $this->initializeLazyObject();
+    }
+    
 
     private const LAZY_OBJECT_PROPERTY_SCOPES = [
         "\0".parent::class."\0".'charactereSet' => [parent::class, 'charactereSet', null],

@@ -50,7 +50,7 @@ class GedcomFixtures extends Fixture implements OrderedFixtureInterface
         $header_2->setCharactereSet(KnownCharacterSetTypes::UTF_8);
         $gedcom_2 = new Gedcom();
         $gedcom_2->setName("Généalogie des Rois Anglais");
-        $gedcom_2->setUser($user2);
+        $gedcom_2->setUser($user1);
         $gedcom_2->setCreationDate(new DateTime('2024-02-05'));
         $gedcom_2->setLastModifiedDate(new DateTime('2024-02-16'));
         $gedcom_2->setHeader($header_2);
@@ -64,7 +64,7 @@ class GedcomFixtures extends Fixture implements OrderedFixtureInterface
         $header_3->setCharactereSet(KnownCharacterSetTypes::UTF_8);
         $gedcom_3 = new Gedcom();
         $gedcom_3->setName("Généalogie de Luz Cerezo Brocart");
-        $gedcom_3->setUser($user2);
+        $gedcom_3->setUser($user1);
         $gedcom_3->setCreationDate(new DateTime('2024-02-10'));
         $gedcom_3->setLastModifiedDate(new DateTime('2024-02-19'));
         $gedcom_3->setHeader($header_3);
@@ -84,6 +84,34 @@ class GedcomFixtures extends Fixture implements OrderedFixtureInterface
         $gedcom_4->setHeader($header_4);
         $gedcom_4->setTrailer('TRLR');
         $manager->persist($gedcom_4);
+
+        // Création d'un Gedcom
+        $header_5 = new Header();
+        $header_5->setVersionNumber('5.5.51');
+        $header_5->setVersionForm('lineage-linked');
+        $header_5->setCharactereSet(KnownCharacterSetTypes::UTF_8);
+        $gedcom_5 = new Gedcom();
+        $gedcom_5->setName("Généalogie de Louis XVIII");
+        $gedcom_5->setUser($user2);
+        $gedcom_5->setCreationDate(new DateTime('2024-04-25'));
+        $gedcom_5->setLastModifiedDate(new DateTime('2024-05-07'));
+        $gedcom_5->setHeader($header_5);
+        $gedcom_5->setTrailer('TRLR');
+        $manager->persist($gedcom_5);
+
+        // Création d'un Gedcom
+        $header_6 = new Header();
+        $header_6->setVersionNumber('5.5.51');
+        $header_6->setVersionForm('lineage-linked');
+        $header_6->setCharactereSet(KnownCharacterSetTypes::UTF_8);
+        $gedcom_6 = new Gedcom();
+        $gedcom_6->setName("Généalogie de Jean Moulins");
+        $gedcom_6->setUser($user2);
+        $gedcom_6->setCreationDate(new DateTime('2024-05-03'));
+        $gedcom_6->setLastModifiedDate(new DateTime('2024-05-03'));
+        $gedcom_6->setHeader($header_6);
+        $gedcom_6->setTrailer('TRLR');
+        $manager->persist($gedcom_6);
 
         $manager->flush();
    }

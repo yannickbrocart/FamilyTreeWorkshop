@@ -10,14 +10,14 @@
                     <label for="email" class="form-label">Email</label>
                     <input type="email" class="form-control form-control-lg" formControlName='email'>
                     <i class="fa-solid icon-row" [ngClass]="{
-                        'fa-xmark': !signupForm.controls.email.valid && signupForm.controls.email.touched,
+                        'fa-xmark': !signupForm.controls.email.valid && signupForm.controls.email.dirty,
                         'fa-check': signupForm.controls.email.valid }"></i>
                 </div>
                 <div id="icon-div" class="col-12 col-lg-6 mb-3">
                     <label for="username" class="form-label">Username</label>
                     <input type="text" class="form-control form-control-lg" formControlName='username'>
                     <i class="fa-solid icon-row" [ngClass]="{
-                        'fa-xmark': !signupForm.controls.username.valid && signupForm.controls.username.touched,
+                        'fa-xmark': !signupForm.controls.username.valid && signupForm.controls.username.dirty,
                         'fa-check': signupForm.controls.username.valid }"></i>
                 </div>
             </div>
@@ -28,7 +28,7 @@
                     <i class="fa-solid icon-row" [ngClass]="{
                         'fa-eye-slash': !showPassword, 
                         'fa-eye': showPassword,
-                        'xmark-color': !signupForm.controls.password.valid && signupForm.controls.password.touched,
+                        'xmark-color': !signupForm.controls.password.valid && signupForm.controls.password.dirty,
                         'check-color': signupForm.controls.password.valid }" 
                         (click)="showPassword = jwtAuthService.toggleShowPassword(showPassword)"></i>
                     <div id="emailHelp" class="form-text">
@@ -42,7 +42,7 @@
                     <i class="fa-solid icon-row" [ngClass]="{
                         'fa-eye-slash': !showPassword, 
                         'fa-eye': showPassword,
-                        'xmark-color': !signupForm.controls.confirmPassword.valid && signupForm.controls.confirmPassword.touched,
+                        'xmark-color': !signupForm.controls.confirmPassword.valid && signupForm.controls.confirmPassword.dirty,
                         'zz-color': signupForm.controls.confirmPassword.errors && !signupForm.controls.confirmPassword,
                         'check-color': signupForm.controls.confirmPassword.valid && !signupForm.controls.confirmPassword.errors }" 
                         (click)="showPassword = jwtAuthService.toggleShowPassword(showPassword)"></i>
@@ -53,14 +53,14 @@
                     <label for="firstname" class="form-label">Firstname</label>
                     <input type="text" class="form-control form-control-lg" formControlName='firstname'>
                     <i class="fa-solid icon-row" [ngClass]="{
-                        'fa-xmark': !signupForm.controls.firstname.valid && signupForm.controls.firstname.touched,
+                        'fa-xmark': !signupForm.controls.firstname.valid && signupForm.controls.firstname.dirty,
                         'fa-check': signupForm.controls.firstname.valid }"></i>
                 </div>
                 <div id="icon-div" class="col-12 col-lg-6 mb-3">
                     <label for="lastname" class="form-label">Lastname</label>
                     <input type="text" class="form-control form-control-lg" formControlName='lastname'>
                     <i class="fa-solid icon-row" [ngClass]="{
-                        'fa-xmark': !signupForm.controls.lastname.valid && signupForm.controls.lastname.touched,
+                        'fa-xmark': !signupForm.controls.lastname.valid && signupForm.controls.lastname.dirty,
                         'fa-check': signupForm.controls.lastname.valid }"></i>
                 </div>
             </div>
