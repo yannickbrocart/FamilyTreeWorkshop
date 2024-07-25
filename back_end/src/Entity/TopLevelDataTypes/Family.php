@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use app\Entity\TopLevelDataTypes\Individual;
 use Symfony\Component\Serializer\Annotation\Groups;
+use App\Entity\Gedcom;
 
 
 #[ORM\Entity(repositoryClass: FamilyRepository::class)]
@@ -30,6 +31,10 @@ class Family
     #[ORM\OneToMany(targetEntity: Individual::class, mappedBy: 'childToFamily')]
     #[Groups(['families_to_json'])]
     private Collection $childs;
+
+    #[ORM\ManyToOne(inversedBy: 'families')]
+    #[ORM\JoinColumn(nullable: true)]
+    private ?Gedcom $gedcom = null; 
 
     public function __construct()
     {
@@ -100,6 +105,17 @@ class Family
             }
         }
 
+        return $this;
+    }
+
+    public function getGedcom(): ?Gedcom
+    {
+        return $this->gedcom;
+    }
+
+    public function setGedcom(?Gedcom $gedcom): static
+    {
+        $this->gedcom = $gedcom;
         return $this;
     }
     

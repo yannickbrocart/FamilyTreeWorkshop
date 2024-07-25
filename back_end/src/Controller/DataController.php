@@ -15,13 +15,11 @@ use App\Repository\UserRepository;
 
 class DataController extends AbstractController
 { 
-    private User $userId;
-
     public function __construct( 
         protected Security $security) { }
     
         #[Route('/genealogy/manage/getallbyuser', name: 'app_genealogy_manage_get_allbyuser')]
-        public function getAllGenealogies(Request $request, GedcomRepository $gedcomRepository, SerializeModel $serializeModel): Response
+        public function getAllGenealogiesByUser(Request $request, GedcomRepository $gedcomRepository, SerializeModel $serializeModel): Response
         {
             $response = new Response();
             $userEmail = $request->getPayload()->get('userEmail');
@@ -32,7 +30,6 @@ class DataController extends AbstractController
             }
             $response->setContent($serializeModel->serializeAllToManageGenealogy($gedcomList));
             return $response->setStatusCode(Response::HTTP_OK);
-            
         }
 
     #[Route('/genealogy/manage/getbyid/{id}', name: 'app_genealogy_manage_get_byid')]
@@ -40,7 +37,7 @@ class DataController extends AbstractController
     {
         $response = new Response();
         try { 
-            $gedcom = $gedcomRepository->findOneBy(['id' => $id]);
+            $gedcom = $gedcomRepository->find($id);
         } catch(Exception $e) {
             return $response->setStatusCode(Response::HTTP_NO_CONTENT);
         }

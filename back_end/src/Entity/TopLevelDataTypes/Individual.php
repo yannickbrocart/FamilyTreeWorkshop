@@ -43,8 +43,13 @@ class Individual
     private Collection $spouseToFamily2;
 
     #[ORM\ManyToOne(inversedBy: 'childToFamily')]
+    #[Groups(['model_to_json'])]
     private ?Family $childToFamily = null;    
     
+    #[ORM\ManyToOne(targetEntity: 'App\Entity\Gedcom', inversedBy: 'individuals')]
+    #[ORM\JoinColumn(nullable: true)]
+    private ?Gedcom $gedcom = null;    
+
     public function __construct()
     {
         $this->spouseToFamily1 = new ArrayCollection();
@@ -204,6 +209,17 @@ class Individual
            if ($individual->getId() == $id) return $individual;
         }
         return null;
+    }
+
+    public function getGedcom(): ?Gedcom
+    {
+        return $this->gedcom;
+    }
+
+    public function setGedcom(?Gedcom $gedcom): static
+    {
+        $this->gedcom = $gedcom;
+        return $this;
     }
 
 }

@@ -14,6 +14,7 @@ export class GenealogyManageComponent{
   public isRenameGenealogy: boolean = false;
   public isDeleteGenealogy: boolean = false;
   public idGenealogy: number = 0;
+  public idGenealogyForName: number = 0;
   public genealogies: Genealogy[] = [];
 
   renameGenealogyForm = this.formBuilder.group({
@@ -47,16 +48,18 @@ export class GenealogyManageComponent{
 
   public openGenealogyById(id: number) {
     this.dataService.openGenealogyById(id).subscribe((response:any) => {
+      console.log(response);
        this.sendGenealogyData(response);
        this.sendIsManageGenealogies(false);
       });   
   }
 
-  public renameGenealogy(id: number) {
+  public renameGenealogy(id: number, genealogyId: number) {
     this.isDeleteGenealogy = false;
     this.isRenameGenealogy = true;
     this.renameGenealogyForm.reset();
-    this.idGenealogy = id;
+    this.idGenealogy = genealogyId;
+    this.idGenealogyForName = id;
   }
   
 
@@ -69,10 +72,11 @@ export class GenealogyManageComponent{
   }
 
 
-  public deleteGenealogy(id: number) {
+  public deleteGenealogy(id: number, genealogyId: number) {
     this.isRenameGenealogy = false;
     this.isDeleteGenealogy = true;
-    this.idGenealogy = id;
+    this.idGenealogy = genealogyId;
+    this.idGenealogyForName = id;
     } 
 
 

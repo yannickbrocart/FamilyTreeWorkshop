@@ -33,9 +33,7 @@ export class ParseService {
   }
 
   parseJsonToListByFamily(jsonFromApi: any) {
-    //var individual: Individual = {};
     var child: Individual = {};
-
     if (jsonFromApi['families']) {
       for (var i = 1; i <= jsonFromApi['families'].length; i++) {
         listOfChilds = [];

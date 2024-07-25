@@ -49,17 +49,17 @@ class ImportGedcomFileController extends AbstractController
             return $this->response->setStatusCode($this->statusCode);   
         }
         
-        /*try {
-            $this->saveGenealogy($request->getPayload()->get('genealogyName'), $em);           
-        } catch(Exception $e) {
-            return $this->response->setStatusCode(Response::HTTP_NOT_FOUND);
-        }
+        // try {
+        //     $this->saveGenealogy($request->getPayload()->get('genealogyName'), $em);           
+        // } catch(Exception $e) {
+        //     return $this->response->setStatusCode(Response::HTTP_NOT_FOUND);
+        // }
 
-        try {
-            echo($this->loadGenealogy($em));           
-        } catch(Exception $e) {
-            return $this->response->setStatusCode(Response::HTTP_NOT_FOUND);
-        }*/
+        // try {
+        //     echo($this->loadGenealogy($em));           
+        // } catch(Exception $e) {
+        //     return $this->response->setStatusCode(Response::HTTP_NOT_FOUND);
+        // }
 
         $this->response->headers->set('Content-Type', 'application/json');
         $this->response->setContent($serializeModel->serializeToView($this->gedcom));
@@ -104,8 +104,8 @@ class ImportGedcomFileController extends AbstractController
         var_dump($name1);
         var_dump($individual1);
         
-        // $em->persist($individual1);
-        // $em->flush();
+        $em->persist($individual1);
+        $em->flush();
 
 
 

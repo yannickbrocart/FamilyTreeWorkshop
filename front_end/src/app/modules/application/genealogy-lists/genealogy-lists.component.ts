@@ -59,12 +59,12 @@ export class GenealogyListsComponent {
   ngOnInit(): void {
     this.dataService.genealogyData$.subscribe((data) => {
       this.genealogyData = data;
+      
     });
     this.individuals = this.parseService.parseJsonToListByIndividual(this.genealogyData);
     //this.generations = this.parseService.parseJsonToListByGeneration(this.genealogyData);
     this.families = this.parseService.parseJsonToListByFamily(this.genealogyData);
     this.places = this.parseService.parseJsonToListByPlace(this.genealogyData);
-    console.log(this.genealogyData);
   }
 
   constructor(private dataService: DataService, public parseService: ParseService) {}

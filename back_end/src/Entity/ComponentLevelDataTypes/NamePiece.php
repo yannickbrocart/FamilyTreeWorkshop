@@ -122,7 +122,6 @@ class NamePiece
     public function setName(?Name $name): static
     {
         $this->name = $name;
-
         return $this;
     }
 }

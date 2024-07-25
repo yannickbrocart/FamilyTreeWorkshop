@@ -6,7 +6,7 @@ use App\Repository\ComponentLevelDataTypes\IndividualEventRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 use App\Entity\TopLevelDataTypes\Individual;
-
+use phpDocumentor\Reflection\Types\Boolean;
 
 #[ORM\Entity(repositoryClass: IndividualEventRepository::class)]
 class IndividualEvent
@@ -24,9 +24,9 @@ class IndividualEvent
     #[Groups(['model_to_json'])]
     private ?IndividualEventDetail $deathDetail = null;
 
-    #[ORM\Column(type: 'string')]
+    #[ORM\Column(type: 'boolean')]
     #[Groups(['model_to_json'])]
-    private ?String $death = null;
+    private ?bool $death = null;
 
     #[ORM\ManyToOne(targetEntity: Individual::class, inversedBy: 'names')]
     private ?Individual $individual = null;
@@ -47,12 +47,12 @@ class IndividualEvent
         return $this;
     }
 
-    public function getDeath(): ?String
+    public function getDeath(): ?bool
     {
         return $this->death;
     }
 
-    public function setDeath(String $death): static
+    public function setDeath(bool $death): static
     {
         $this->death = $death;
         return $this;

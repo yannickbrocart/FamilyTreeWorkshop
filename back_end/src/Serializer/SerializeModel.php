@@ -26,8 +26,7 @@ class SerializeModel
 
     public function serializeOneToManageGenealogy(Gedcom $gedcom)
     {
-        return $this->serializer->serialize($gedcom, 'json', ['groups' => 'managegenealogy_to_json']);
+        return $this->serializer->serialize($gedcom, 'json', ['groups' => 'model_to_json']);
     }
-
     
 }

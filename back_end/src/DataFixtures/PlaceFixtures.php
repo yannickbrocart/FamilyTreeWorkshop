@@ -12,7 +12,7 @@ class PlaceFixtures extends Fixture implements OrderedFixtureInterface
   
     public function getOrder(): int
     {
-        return 20; // smaller means sooner
+        return 1; // smaller means sooner
     }
 
     public function load(ObjectManager $manager): void

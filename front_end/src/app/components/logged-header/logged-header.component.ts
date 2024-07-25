@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { JwtAuthService } from 'src/app/services/jwt-auth.service';
+import { CookieService } from 'ngx-cookie-service';
 
 @Component({
   selector: 'app-logged-header',
@@ -8,9 +9,11 @@ import { JwtAuthService } from 'src/app/services/jwt-auth.service';
 })
 export class LoggedHeaderComponent {
 
-  constructor(private jwtAuthService: JwtAuthService) { }
+  constructor(private jwtAuthService: JwtAuthService, private cookieService: CookieService) { }
 
   logout() {
+    this.cookieService.delete('username');
+    this.cookieService.delete('password');
     this.jwtAuthService.logout();
   }
 

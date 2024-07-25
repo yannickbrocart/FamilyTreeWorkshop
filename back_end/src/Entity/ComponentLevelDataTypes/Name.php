@@ -24,7 +24,8 @@ class Name
     #[Groups(['model_to_json'])]
     private ?KnownNameTypes $type = null;
 
-    #[ORM\OneToMany(targetEntity: 'App\Entity\ComponentLevelDataTypes\NamePiece', mappedBy: 'name')]
+    #[ORM\OneToMany(targetEntity: 'App\Entity\ComponentLevelDataTypes\NamePiece', 
+    mappedBy: 'name', cascade: ['persist', 'remove'])]
     #[Groups(['model_to_json'])]
     private Collection $namePieces;
 

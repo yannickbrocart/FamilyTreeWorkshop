@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { map, BehaviorSubject } from 'rxjs';
 import { environment } from 'src/environments/environment';
+import { CookieService } from 'ngx-cookie-service';
 
 
 @Injectable({
@@ -13,7 +14,7 @@ export class JwtAuthService {
   eyeOn: any | null = document.getElementById('#eye-on');
   eyeOff: any | null = document.getElementById('#eye-off');
 
-  constructor(private http: HttpClient, private router: Router) { }
+  constructor(private http: HttpClient, private router: Router, private cookieService: CookieService) { }
 
   login(email: string, password: string) {
     return this.http.post(environment.apiURL + '/login_check', { 'username': email, 'password': password }).pipe(
@@ -30,6 +31,7 @@ export class JwtAuthService {
   }
 
   get isLoggedIn() {
+  if(this.cookieService.get('username')) this.loggedIn.next(true);
     return this.loggedIn.asObservable();
   }
 

@@ -28,11 +28,11 @@ class Gedcom
     #[Groups(['model_to_json'])]
     private ?Header $header = null;
 
-    #[ORM\OneToMany(mappedBy: 'gedcom', targetEntity: Individual::class, orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: 'App\Entity\TopLevelDataTypes\Individual', mappedBy: 'gedcom', cascade: ['persist', 'remove'])]
     #[Groups(['model_to_json'])]
     private Collection $individuals;
     
-    #[ORM\OneToMany(mappedBy: 'gedcom', targetEntity: Family::class, orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: 'App\Entity\TopLevelDataTypes\Family', mappedBy: 'gedcom', cascade: ['persist', 'remove'])]
     #[Groups(['model_to_json'])]
     private Collection $families;
 
@@ -40,7 +40,7 @@ class Gedcom
     private ?string $trailer = null;
 
     #[ORM\Column(length: 90)]
-    #[Groups(['managegenealogy_to_json'])]
+    #[Groups(['model_to_json','managegenealogy_to_json'])]
     private ?string $name = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]

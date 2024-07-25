@@ -16,17 +16,17 @@
                     <div class="col-md-6 genealogy-manage-list-value">{{ genealogy.name }}</div>
                     <div class="col-md-2 genealogy-manage-list-value">{{ genealogy.lastModifiedDate | date:'MMM d, y' }}</div>
                     <div class="col genealogy-manage-list-value">
-                        <button (click)="openGenealogyById(genealogy.id)" type="button" class="btn btn-primary manage-btn">
+                        <button (click)="openGenealogyById(genealogy.id)" type="button" class="btn btn-primary manage-btn" disabled>
                             <i class="fa-solid fa-eye"></i>
                         </button>
                     </div>
                     <div class="col genealogy-manage-list-value">
-                        <button (click)="renameGenealogy(id)" type="button" class="btn btn-primary manage-btn-danger">
+                        <button (click)="renameGenealogy(id, genealogy.id)" type="button" class="btn btn-primary manage-btn-danger">
                             <i class="fa-solid fa-pen-to-square"></i>
                         </button>
                     </div>
                     <div class="col genealogy-manage-list-value">
-                        <button (click)="deleteGenealogy(id)" type="button" class="btn btn-primary manage-btn-alert">
+                        <button (click)="deleteGenealogy(id, genealogy.id)" type="button" class="btn btn-primary manage-btn-alert">
                             <i class="fa-solid fa-trash"></i>
                         </button>
                     </div>
@@ -38,7 +38,7 @@
             (ngSubmit)="onSubmitRenameGenealogyForm()">
             <div id="icon-div" class="col-12 col-lg-9 mb-3">
                 <label for="newName" class="form-label">Enter the new name for <span
-                        class="citation">'{{genealogies[idGenealogy].name}}'</span>:</label>
+                        class="citation">'{{genealogies[idGenealogyForName].name}}'</span>:</label>
                 <input type="text" class="form-control form-control-lg" formControlName='newName'>
                 <i class="fa-solid" [ngClass]="{
                  'fa-xmark': !renameGenealogyForm.controls.newName.valid && renameGenealogyForm.controls.newName.touched,
@@ -55,7 +55,7 @@
         (ngSubmit)="onSubmitDeleteGenealogyForm()">
             <div class="col">
                 <label for="newName" class="form-label">
-                    Are you sure to want delete <span class="citation">'{{genealogies[idGenealogy].name}}'</span>
+                    Are you sure to want delete <span class="citation">'{{genealogies[idGenealogyForName].name}}'</span>
                     genealogy?
                 </label>
             </div>
